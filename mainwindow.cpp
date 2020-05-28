@@ -30,7 +30,14 @@ void MainWindow::on_testConvert_clicked()
        MN_SUCCESS("ok source opened");
         //destPath = fileName.replace(fileName.indexOf(".mdb"),4,".sqlite");
         QString destPath = QFileDialog::getSaveFileName(this,
-            tr("Select Destination DB"), "", tr("SQLITE DB (*.sqlite)"));
+            tr("Select Destination DB"),
+            fileName.replace(fileName.indexOf(".mdb"),4,".sqlite")
+            ,tr("SQLITE DB (*.sqlite)"));
+        if(destPath==""){
+            MN_ERROR("u did not choose a file to save");
+            db.close();
+            return;
+        }
        QSqlDatabase dbDest = QSqlDatabase::addDatabase("QSQLITE",destPath);
 
        dbDest.setDatabaseName(destPath);
@@ -48,8 +55,6 @@ void MainWindow::on_testConvert_clicked()
                            "temp_store = DEFAULT;"
                            "foreign_keys = ON;");
        QStringList list=db.tables(QSql::Tables);
-
-
 
        foreach(QString name,list){
 
@@ -74,13 +79,10 @@ void MainWindow::on_testConvert_clicked()
                return;
            }
 
-
            //move data
            dbDest.transaction();
             while(query.next()){
-                //QString sql =insetSql(query.record(),name);
                 PreparedQueryResult ret = insertSqlPrepared(query.record(),name);
-                //qDebug()<<ret.preparedSql;
                 if(not queryDest.prepare(ret.preparedSql)){
                   MN_ERROR(query.lastError().text());
                 };
@@ -88,9 +90,7 @@ void MainWindow::on_testConvert_clicked()
                 for (int i=0;i<count;i++) {
                     queryDest.bindValue(":i"+QString::number(i),ret.values[":i"+QString::number(i)]);
                 }
-                //qDebug() << sql;
                 if(queryDest.exec()){
-                 //  MN_SUCCESS( "data inserted");
 
                 }else{
                     MN_ERROR("cant insert data: "+queryDest.lastError().text());
@@ -107,15 +107,9 @@ void MainWindow::on_testConvert_clicked()
                  dbDest.close();
                  return;
             }
-
-
            MN_SUCCESS(name);
        }
-
-
    dbDest.close();
 }
-
    db.close();
-
 }
