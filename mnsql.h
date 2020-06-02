@@ -4,6 +4,8 @@
 #include "QSqlRecord"
 #include "QSqlField"
 #include <QMap>
+#include <QSqlDatabase>
+#include <QSqlQuery>
 
 struct PreparedQueryResult{
 public:

@@ -11,6 +11,11 @@ QString Log::formatMessage(QString msg)
     setTimeStampToCurrent();
 }
 
+QString Log::getTxtFileNameFromDate()
+{
+   return QDateTime::currentDateTime().toString("dd.MM.yyyy hh_mm_ss")+".txt";
+}
+
 void Log::showError(QString msg)
 {
     STD_OUT << QString("  \033[47m|\033[0m\033[1;97;41m ERROR \033[0m \033[1;31m%1\033[0m").arg(formatMessage(msg)) << endl;
@@ -44,4 +49,33 @@ void Log::setTimeStampToCurrent()
 QVariant Log::gettimeInterval()
 {
     return -timeStamp.toLongLong()+QDateTime::currentDateTime().toMSecsSinceEpoch();
+}
+
+void Log::logToFile(QString text,QString fileName)
+{
+     QFile *file;
+     file = new QFile;
+     file->setFileName(LOG_FILE_PATH+fileName);
+     file->open(QIODevice::Append | QIODevice::Text);
+     text = QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss ") + text;
+     QTextStream out(file);
+     out.setCodec("UTF-8");
+     if (file != 0) {
+      out << text <<"\n";
+     }
+
+     if (file != 0)
+     file->close();
+
+     delete file;
+
+
+
+
+}
+
+void Log::logErrToFileConsole(QString text, QString fileName)
+{
+ MN_ERROR(text);
+ logToFile(text,fileName);
 }
