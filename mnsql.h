@@ -7,15 +7,10 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
-struct PreparedQueryResult{
-public:
-    QString preparedSql;
-    QMap<QString,QVariant> values;
 
-};
 QString createTableSql(const QSqlRecord &rcd,QString tableName);
 QString insetSql(const QSqlRecord &rcd,QString tableName);
-PreparedQueryResult insertSqlPrepared(const QSqlRecord &rcd,QString tableName);
+
 
 
 #endif // MNSQL_H

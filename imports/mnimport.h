@@ -1,9 +1,7 @@
 #ifndef MNIMPORT_H
 #define MNIMPORT_H
-#include "mnsql.h"
-#include <QSqlError>
-#include <QFileDialog>
-#include <QObject>
+
+
 #include "log.h"
 #include "mnpathes.h"
 #include "mndb.h"
@@ -14,7 +12,8 @@ public:
     MNImport();
     static bool convertMultiAccessToSqlite(QStringList fileNames, QString destDir);
     static bool convertAccessToSqlite(QString &fileName, QString destDir);
-    static bool convertTable(QString tableName, QString sourceDbName,QString destDbName);
+    static bool dbExportTable(QString tableName, QString sourceDbName,QString destDbName);
+    static bool dbExportTableData(QSqlQuery &querySource, QSqlQuery &queryDest, QString sourceTableName, QString logFilePath);
 };
 
 #endif // MNIMPORT_H

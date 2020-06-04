@@ -19,14 +19,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_testConvert_clicked()
 {
-    QStringList fileNames =QFileDialog::getOpenFileNames(nullptr,
+    QStringList fileNames =QFileDialog::getOpenFileNames(this,
                            "Open Source DB", "", "ACCESS DB (*.mdb)");
     if(fileNames.count()==0){
         QMessageBox messageBox;
         messageBox.critical(0,"Error","You did not select any file");
         return ;
     }
-    QString destDir = QFileDialog::getExistingDirectory(nullptr,"Select Destination DB directory","",QFileDialog::ShowDirsOnly);
+    QString destDir = QFileDialog::getExistingDirectory(this,"Select Destination DB directory","",QFileDialog::ShowDirsOnly);
 
     if(destDir==""){
         QMessageBox messageBox;
@@ -34,6 +34,9 @@ void MainWindow::on_testConvert_clicked()
         return ;
     }
 
-    MNImport::convertMultiAccessToSqlite(fileNames,destDir);
+    if (not MNImport::convertMultiAccessToSqlite(fileNames,destDir)){
+             QMessageBox messageBox;
+             messageBox.critical(0,"Error","could not convert some database check logFile ");
+    }
 
 }

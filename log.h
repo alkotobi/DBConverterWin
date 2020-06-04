@@ -16,6 +16,7 @@ static QString MNERR_CantOpenFile="cant Open Source DB ";
 static QString MNERR_CantCreateTable="cant create table: ";
 static QString MNERR_CantWriteData="cant insert data: ";
 static QString MNERR_CantCommitTransaction="cant commit tarnsaction: ";
+
 class Log
 {
 
