@@ -55,7 +55,7 @@ void Log::logToFile(QString text,QString fileName)
 {
      QFile *file;
      file = new QFile;
-     file->setFileName(LOG_FILE_PATH+fileName);
+     file->setFileName(fileName);
      file->open(QIODevice::Append | QIODevice::Text);
      text = QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss ") + text;
      QTextStream out(file);

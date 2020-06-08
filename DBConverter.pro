@@ -17,20 +17,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    databases/mnbooklist.cpp \
     imports/mndb.cpp \
     imports/mnimport.cpp \
     imports/mnpathes.cpp \
     log.cpp \
     main.cpp \
     mainwindow.cpp \
+    mninit.cpp \
     mnsql.cpp
 
 HEADERS += \
+    MNConst.h \
+    databases/mnbooklist.h \
     imports/mndb.h \
     imports/mnimport.h \
     imports/mnpathes.h \
     log.h \
     mainwindow.h \
+    mninit.h \
     mnsql.h
 
 FORMS += \

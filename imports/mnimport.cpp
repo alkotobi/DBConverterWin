@@ -40,11 +40,12 @@ bool MNImport::convertAccessToSqlite(QString &dbSourcePath,QString destDir)
             success=success and MNDb::dbExportTable(name,dbSourcePath,destPath);
         }
         if(success){
-            if(MNDb::dbCommitTransaction(destPath)){
+            if(not MNDb::dbCommitTransaction(destPath)){
                 Log::logErrToFileConsole(MNERR_CantCommitTransaction+destPath,logFilePath);
+                MNDb::dbRollBackTransaction(destPath);
                 return false;
             }
-        }else MNDb::dbRollBackTransaction(destPath);
+        }
 
         MNDb::dbClose(destPath);
         MNDb::dbClose(dbSourcePath);

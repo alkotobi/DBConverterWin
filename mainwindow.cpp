@@ -40,3 +40,59 @@ void MainWindow::on_testConvert_clicked()
     }
 
 }
+
+void MainWindow::on_bkImport_clicked()
+{
+ MNPathes::createAppDataDirStructre();
+ int bkId=34460;
+ QString bkDbDestPath;
+ QString bkListDbDestPath=MNPathes::getdbBooksListPath();
+ QString bkDbSourcePath ;
+ QString bkListDbSourcePath=QFileDialog::getOpenFileName(this,
+                          "Open Source DB", "", "ACCESS DB (*.mdb)");//main.mdb
+
+
+
+
+
+ if (not MNDb::openSqliteDb(bkListDbDestPath)){
+     MN_ERROR("cant open sqlite database");
+ }
+ if(not MNDb::openMsAccessDb(bkListDbSourcePath)){
+     MN_ERROR("cant open main.mdb");
+ }
+
+ //get the book database link
+ bkDbSourcePath=MNBookList::getBkDbSourcePath(bkListDbSourcePath,bkId);
+ if(bkDbSourcePath == ""){
+     QMessageBox messageBox;
+     messageBox.critical(0,"Error","cant find the book "+QString::number(bkId));
+     //TODO: must close DBS
+     return ;
+ }
+
+ if(not MNDb::openMsAccessDb(bkDbSourcePath)){
+     MN_ERROR("cant open the book: "+QString::number(bkId)+".mdb");
+ }
+ QSqlQuery qrBkSource(QSqlDatabase::database(bkDbSourcePath));
+ QSqlQuery qrbkIndex(QSqlDatabase::database(bkDbSourcePath));
+
+ //TODO: import book info data
+ {
+     QSqlQuery qrbkListDbSource(QSqlDatabase::database(bkListDbSourcePath));
+     qrbkListDbSource.exec("select * from [0bok] where bkid="+QString::number(bkId));
+     if(qrbkListDbSource.first()){
+         MN_SUCCESS(qrbkListDbSource.record().field(1).value().toString());
+     }
+ }
+
+ //*********************
+
+ //TODO: inport author data
+
+ //close dbs
+ MNDb::dbClose(bkListDbDestPath);
+ MNDb::dbClose(bkListDbSourcePath);
+ MNDb::dbClose(bkDbSourcePath);
+
+}

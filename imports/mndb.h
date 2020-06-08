@@ -8,6 +8,7 @@
 #include <QSqlError>
 #include <QSqlRecord>
 #include <QSqlField>
+#include <QMap>
 
 #include "log.h"
 
@@ -21,8 +22,9 @@ public:
 
 class MNDb
 {
-    static bool dbExportTableData(QSqlQuery &querySource, QSqlQuery &queryDest, QString sourceTableName, QString logFilePath);
-    static PreparedQueryResult sqlInsertPrepared(const QSqlRecord &rcd, QString tableName);
+    static bool dbExportTableData(QSqlQuery &querySource, QSqlQuery &queryDest,
+                                  QString sourceTableName, QString logFilePath,QMap<QString,QString> *map=nullptr);
+    static PreparedQueryResult sqlInsertPrepared(const QSqlRecord &rcd, QString tableName,QMap<QString,QString> *map=nullptr);
     static QString sqlCreateTable(const QSqlRecord &rcd, QString tableName);
 public:
     MNDb();
@@ -35,7 +37,8 @@ public:
     static bool dbRollBackTransaction(QString dbPath);
     static bool dbExec(QString dbPath,QString sql);
     static bool makeSQliteDbFaster(QString dbPath);
-    static bool dbExportTable(QString sourceTableName, QString sourceAccessDbName, QString destSqliteDbName);
+//    static bool dbExportTable(QString sourceTableName, QString sourceAccessDbName, QString destSqliteDbName);
+    static bool dbExportTable(QString sourceTableName, QString sourceAccessDbName, QString destSqliteDbName,QMap<QString,QString> *map=nullptr);
 
 };
 

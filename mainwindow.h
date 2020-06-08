@@ -7,6 +7,8 @@
 #include "QString"
 #include <QDialog>
 #include <QFileDialog>
+#include "./databases/mnbooklist.h"
+#include "./imports/mnpathes.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,6 +24,8 @@ public:
 
 private slots:
     void on_testConvert_clicked();
+
+    void on_bkImport_clicked();
 
 private:
     Ui::MainWindow *ui;
