@@ -11,7 +11,8 @@
 #include <QMap>
 
 #include "log.h"
-
+#include "./imports/mnpathes.h"
+#include "./databases/mnbooklist.h"
 
 struct PreparedQueryResult{
 public:
@@ -22,7 +23,7 @@ public:
 
 class MNDb
 {
-    static bool dbExportTableData(QSqlQuery &querySource, QSqlQuery &queryDest,
+    static bool exportAllTableData(QSqlQuery &querySource, QSqlQuery &queryDest,
                                   QString sourceTableName, QString logFilePath,QMap<QString,QString> *map=nullptr);
     static PreparedQueryResult sqlInsertPrepared(const QSqlRecord &rcd, QString tableName,QMap<QString,QString> *map=nullptr);
     static QString sqlCreateTable(const QSqlRecord &rcd, QString tableName);
@@ -31,14 +32,16 @@ public:
     static bool openMsAccessDb(QString dbPath);
     static bool openSqliteDb(QString dbPath);
     static QStringList getDbTableNames(QString dbPath);
-    static bool dbStartTransaction(QString dbPath);
-    static bool dbCommitTransaction(QString dbPath);
-    static void dbClose(QString dbPath);
-    static bool dbRollBackTransaction(QString dbPath);
-    static bool dbExec(QString dbPath,QString sql);
+    static bool startTransaction(QString dbPath);
+    static bool commitTransaction(QString dbPath);
+    static void closeDb(QString dbPath);
+    static bool rollBackTransaction(QString dbPath);
+    static bool execSQl(QString dbPath,QString sql);
     static bool makeSQliteDbFaster(QString dbPath);
 //    static bool dbExportTable(QString sourceTableName, QString sourceAccessDbName, QString destSqliteDbName);
-    static bool dbExportTable(QString sourceTableName, QString sourceAccessDbName, QString destSqliteDbName,QMap<QString,QString> *map=nullptr);
+    static bool exportTable(QString sourceTableName, QString sourceAccessDbName, QString destSqliteDbName,QMap<QString,QString> *map=nullptr);
+    static bool createLocalDbs();
+    static bool insertRecord(QSqlRecord &recordSource, QSqlQuery &queryDest, QString tableName, QString logFilePath, QMap<QString, QString> &fieldsMap);
 
 };
 

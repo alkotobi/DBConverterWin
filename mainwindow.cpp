@@ -43,7 +43,7 @@ void MainWindow::on_testConvert_clicked()
 
 void MainWindow::on_bkImport_clicked()
 {
- MNPathes::createAppDataDirStructre();
+
  int bkId=34460;
  QString bkDbDestPath;
  QString bkListDbDestPath=MNPathes::getdbBooksListPath();
@@ -78,21 +78,15 @@ void MainWindow::on_bkImport_clicked()
  QSqlQuery qrbkIndex(QSqlDatabase::database(bkDbSourcePath));
 
  //TODO: import book info data
- {
-     QSqlQuery qrbkListDbSource(QSqlDatabase::database(bkListDbSourcePath));
-     qrbkListDbSource.exec("select * from [0bok] where bkid="+QString::number(bkId));
-     if(qrbkListDbSource.first()){
-         MN_SUCCESS(qrbkListDbSource.record().field(1).value().toString());
-     }
- }
+  MNBookList::importBook( bkListDbSourcePath, bkListDbDestPath, bkId );
 
  //*********************
 
  //TODO: inport author data
 
  //close dbs
- MNDb::dbClose(bkListDbDestPath);
- MNDb::dbClose(bkListDbSourcePath);
- MNDb::dbClose(bkDbSourcePath);
+ MNDb::closeDb(bkListDbDestPath);
+ MNDb::closeDb(bkListDbSourcePath);
+ MNDb::closeDb(bkDbSourcePath);
 
 }

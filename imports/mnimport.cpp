@@ -35,20 +35,20 @@ bool MNImport::convertAccessToSqlite(QString &dbSourcePath,QString destDir)
 
         // get access table names list
         QStringList list=MNDb::getDbTableNames(dbSourcePath);
-        MNDb::dbStartTransaction(destPath);
+        MNDb::startTransaction(destPath);
         foreach(QString name,list){
-            success=success and MNDb::dbExportTable(name,dbSourcePath,destPath);
+            success=success and MNDb::exportTable(name,dbSourcePath,destPath);
         }
         if(success){
-            if(not MNDb::dbCommitTransaction(destPath)){
+            if(not MNDb::commitTransaction(destPath)){
                 Log::logErrToFileConsole(MNERR_CantCommitTransaction+destPath,logFilePath);
-                MNDb::dbRollBackTransaction(destPath);
+                MNDb::rollBackTransaction(destPath);
                 return false;
             }
         }
 
-        MNDb::dbClose(destPath);
-        MNDb::dbClose(dbSourcePath);
+        MNDb::closeDb(destPath);
+        MNDb::closeDb(dbSourcePath);
         return success;
 
 }

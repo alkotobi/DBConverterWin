@@ -68,3 +68,19 @@ QMap<QString, QString> MNBookList::createFieldsMap()
 
  return map;
 }
+
+bool MNBookList::importBook(QString bkListDbSourcePath,QString bkListDbDestPath,int bkId )
+{
+    QSqlQuery qrbkListDbSource(QSqlDatabase::database(bkListDbSourcePath));
+    qrbkListDbSource.exec("select * from [0bok] where bkid="+QString::number(bkId));
+    if(qrbkListDbSource.first()){
+        MN_SUCCESS(qrbkListDbSource.record().field(1).value().toString());
+        QMap<QString,QString> map = MNBookList::createFieldsMap();
+        QSqlRecord rcd =qrbkListDbSource.record();
+        QSqlQuery qrBkListDest =QSqlQuery(QSqlDatabase::database(bkListDbDestPath));
+        return MNDb::insertRecord(rcd,qrBkListDest,BOOKS_LIST,
+                           bkListDbDestPath+".txt",map);
+
+    }else return false;
+
+}

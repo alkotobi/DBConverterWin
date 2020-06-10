@@ -14,3 +14,10 @@ void MNInit::initRecord(QSqlRecord &rcd)
     fld.setValue(-1);
     rcd.append(fld);
 }
+
+void MNInit::init()
+{
+     MNPathes::createAppDataDirStructre();
+     MNDb::createLocalDbs();
+}
+

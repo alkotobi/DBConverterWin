@@ -38,36 +38,36 @@ bool MNDb::openSqliteDb(QString dbPath)
 
  }
 
- bool MNDb::dbStartTransaction(QString dbPath)
+ bool MNDb::startTransaction(QString dbPath)
  {
      return QSqlDatabase::database(dbPath).transaction();
 
  }
 
- bool MNDb::dbCommitTransaction(QString dbPath)
+ bool MNDb::commitTransaction(QString dbPath)
  {
      return QSqlDatabase::database(dbPath).commit();
 
  }
 
- void MNDb::dbClose(QString dbPath)
+ void MNDb::closeDb(QString dbPath)
  {
      QSqlDatabase::database(dbPath).close();
  }
 
- bool MNDb::dbRollBackTransaction(QString dbPath)
+ bool MNDb::rollBackTransaction(QString dbPath)
  {
      return QSqlDatabase::database(dbPath).rollback();
  }
 
- bool MNDb::dbExec(QString dbPath, QString sql)
+ bool MNDb::execSQl(QString dbPath, QString sql)
  {
      return  QSqlQuery(QSqlDatabase::database(dbPath)).exec(sql);
  }
 
  bool MNDb::makeSQliteDbFaster(QString dbPath)
  {
-     return dbExec(dbPath,"PRAGMA synchronous = OFF;"
+     return execSQl(dbPath,"PRAGMA synchronous = OFF;"
                    "PRAGMA journal_mode = OFF;"
                    "locking_mode = EXCLUSIVE;"
                    "temp_store = MEMORY;"
@@ -75,7 +75,7 @@ bool MNDb::openSqliteDb(QString dbPath)
  }
 
 
- bool MNDb::dbExportTable(QString sourceTableName,QString sourceAccessDbName
+ bool MNDb::exportTable(QString sourceTableName,QString sourceAccessDbName
                                   ,QString destSqliteDbName,QMap<QString,QString> *map)
  {
      {
@@ -100,7 +100,7 @@ bool MNDb::openSqliteDb(QString dbPath)
          }
 
          //move data
-         if(dbExportTableData(querySource,queryDest,sourceTableName,logFilePath,map)){
+         if(exportAllTableData(querySource,queryDest,sourceTableName,logFilePath,map)){
              MN_SUCCESS(sourceTableName);
 
          }else return false;
@@ -112,25 +112,52 @@ bool MNDb::openSqliteDb(QString dbPath)
 
  }
 
+ bool MNDb::createLocalDbs()
+ {
+     // create db
+      QString bkListDbDestPath=MNPathes::getdbBooksListPath();
+      if (not MNDb::openSqliteDb(bkListDbDestPath)){
+          MN_ERROR("cant open sqlite database");
+          return false;
+      }
 
- bool MNDb::dbExportTableData(QSqlQuery &querySource, QSqlQuery &queryDest,
+      //create books table
+      QSqlRecord rcd= MNBookList::createRecord();
+      QSqlQuery(QSqlDatabase::database(bkListDbDestPath)).exec(MNDb::sqlCreateTable(rcd,BOOKS_LIST));
+
+      MNDb::closeDb(bkListDbDestPath);
+      return true;
+
+ }
+
+ bool MNDb::insertRecord(QSqlRecord &recordSource, QSqlQuery &queryDest,QString tableName,
+                         QString logFilePath ,QMap<QString, QString> &fieldsMap)
+ {
+     PreparedQueryResult ret = MNDb::sqlInsertPrepared(recordSource,tableName,&fieldsMap);
+     if(not queryDest.prepare(ret.preparedSql)){
+         MN_ERROR(queryDest.lastError().text());
+         Log::logToFile(queryDest.lastError().text(),logFilePath);
+         return false;
+     };
+     int count=ret.values.count();
+     for (int i=0;i<count;i++) {
+         queryDest.bindValue(":i"+QString::number(i),ret.values[":i"+QString::number(i)]);
+     }
+     if(not queryDest.exec()){
+         Log::logErrToFileConsole(MNERR_CantWriteData+queryDest.lastError().text(),logFilePath);
+         return false;
+     }
+     return true;
+
+ }
+
+
+ bool MNDb::exportAllTableData(QSqlQuery &querySource, QSqlQuery &queryDest,
                              QString sourceTableName,QString logFilePath,QMap<QString,QString> *map)
  {
      while(querySource.next()){
-         PreparedQueryResult ret = MNDb::sqlInsertPrepared(querySource.record(),sourceTableName,map);
-         if(not queryDest.prepare(ret.preparedSql)){
-             MN_ERROR(querySource.lastError().text());
-             Log::logToFile(querySource.lastError().text(),logFilePath);
-             return false;
-         };
-         int count=ret.values.count();
-         for (int i=0;i<count;i++) {
-             queryDest.bindValue(":i"+QString::number(i),ret.values[":i"+QString::number(i)]);
-         }
-         if(not queryDest.exec()){
-             Log::logErrToFileConsole(MNERR_CantWriteData+queryDest.lastError().text(),logFilePath);
-             return false;
-         }
+         QSqlRecord rcd =querySource.record();
+        insertRecord(rcd,queryDest,sourceTableName,logFilePath,*map);
      }
      return true;
 
@@ -183,11 +210,15 @@ bool MNDb::openSqliteDb(QString dbPath)
 
  QString MNDb::sqlCreateTable(const QSqlRecord &rcd,QString tableName)
  {
+     int i=0;
      QString str="CREATE TABLE IF NOT EXISTS '"+tableName+"' (";
+     if(rcd.field(0).name()=="ID"){
+     str=str+"'ID' INTEGER PRIMARY KEY AUTOINCREMENT,";
+     i=1;
+     }
 
 
-
-        for(int i=0;i<rcd.count();i++){
+        for(;i<rcd.count();i++){
             if (rcd.field(i).isGenerated()){
                 QSqlField fld=rcd.field(i);
                 QString type=fld.value().typeToName(fld.value().type());
