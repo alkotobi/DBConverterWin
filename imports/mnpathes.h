@@ -22,6 +22,7 @@ public:
     static QStringList getFilesPathes();
     static bool createAppDataDirStructre();
     static QString getdbBooksListPath();
+    static QString getAuthDbSourcePath(const QString &bkListDbSourcePath);
 };
 
 #endif // MNPATHES_H

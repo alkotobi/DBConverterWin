@@ -76,13 +76,15 @@ void MainWindow::on_bkImport_clicked()
  }
  QSqlQuery qrBkSource(QSqlDatabase::database(bkDbSourcePath));
  QSqlQuery qrbkIndex(QSqlDatabase::database(bkDbSourcePath));
-
- //TODO: import book info data
+ QString authDbPath=MNPathes::getAuthDbSourcePath(bkListDbSourcePath);
+ if(not MNDb::openMsAccessDb(authDbPath)){
+  MN_ERROR("cant open the authors access db ");
+  return;
+ }
+  MNAuthor::importAuthor(bkListDbSourcePath,bkListDbDestPath,bkId);
   MNBookList::importBook( bkListDbSourcePath, bkListDbDestPath, bkId );
+  //TODO: import kat
 
- //*********************
-
- //TODO: inport author data
 
  //close dbs
  MNDb::closeDb(bkListDbDestPath);

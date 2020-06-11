@@ -5,19 +5,31 @@ MNInit::MNInit()
 
 }
 
-void MNInit::initRecord(QSqlRecord &rcd)
-{
-    QSqlField fld=QSqlField(FLD_ID,QVariant::Int);
-    fld.setValue(-1);
-    rcd.append(fld);
-    fld = QSqlField(FLD_ID_PARENT,QVariant::Int);
-    fld.setValue(-1);
-    rcd.append(fld);
-}
 
+bool MNInit::createLocalDbs()
+{
+    // create db
+     QString bkListDbDestPath=MNPathes::getdbBooksListPath();
+     if (not MNDb::openSqliteDb(bkListDbDestPath)){
+         MN_ERROR("cant open sqlite database");
+         return false;
+     }
+
+     //create books table
+     QSqlRecord rcd= MNBookList::createRecord();
+     QString sql=MNSql::sqlCreateTable(rcd,BOOKS_LIST);
+     QSqlQuery query=QSqlQuery(QSqlDatabase::database(bkListDbDestPath));
+     query.exec(sql);
+      rcd= MNAuthor::createRecord();
+      sql=MNSql::sqlCreateTable(rcd,AUTHOR);
+     query.exec(sql);
+     MNDb::closeDb(bkListDbDestPath);
+     return true;
+
+}
 void MNInit::init()
 {
      MNPathes::createAppDataDirStructre();
-     MNDb::createLocalDbs();
+     createLocalDbs();
 }
 

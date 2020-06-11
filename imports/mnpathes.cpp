@@ -81,3 +81,12 @@ QString MNPathes::getKotobDbPath(QString KotobDbName)
 {
     return getKotobDir()+KotobDbName;
 }
+
+QString MNPathes::getAuthDbSourcePath(const QString &bkListDbSourcePath)
+{
+
+    QDir dir(QFileInfo(bkListDbSourcePath).absolutePath());
+    QString path= QDir::cleanPath(dir.path() +QDir::separator()+
+                                   "special.mdb");
+    return path;
+}

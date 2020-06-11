@@ -42,7 +42,7 @@ QString MNBookList::getBkDbSourcePath(const QString &bkListDbSourcePath, int bkI
 QSqlRecord MNBookList::createRecord()
 {
     QSqlRecord rcd;
-    MNInit::initRecord(rcd);
+    MNRecord::initRecord(rcd);
     rcd.append(QSqlField("title",QVariant::String));
     rcd.append(QSqlField("catId",QVariant::Int));
     rcd.append(QSqlField("bkId",QVariant::Int));
@@ -69,7 +69,7 @@ QMap<QString, QString> MNBookList::createFieldsMap()
  return map;
 }
 
-bool MNBookList::importBook(QString bkListDbSourcePath,QString bkListDbDestPath,int bkId )
+int MNBookList::importBook(QString bkListDbSourcePath,QString bkListDbDestPath,int bkId )
 {
     QSqlQuery qrbkListDbSource(QSqlDatabase::database(bkListDbSourcePath));
     qrbkListDbSource.exec("select * from [0bok] where bkid="+QString::number(bkId));
@@ -78,9 +78,14 @@ bool MNBookList::importBook(QString bkListDbSourcePath,QString bkListDbDestPath,
         QMap<QString,QString> map = MNBookList::createFieldsMap();
         QSqlRecord rcd =qrbkListDbSource.record();
         QSqlQuery qrBkListDest =QSqlQuery(QSqlDatabase::database(bkListDbDestPath));
-        return MNDb::insertRecord(rcd,qrBkListDest,BOOKS_LIST,
+        //check if the book exists
+        int id=MNQuery::getFirstId(bkListDbDestPath,BOOKS_LIST,"bkid ="+QString::number(bkId));
+        if(id!=0) return id;
+        return MNQuery::insertRecord(rcd,qrBkListDest,BOOKS_LIST,
                            bkListDbDestPath+".txt",map);
+        //TODO: update id
+        //TODO: test getFirstId
 
-    }else return false;
+    }else return 0;
 
 }

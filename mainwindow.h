@@ -9,6 +9,8 @@
 #include <QFileDialog>
 #include "./databases/mnbooklist.h"
 #include "./imports/mnpathes.h"
+#include "./databases/mnauthor.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

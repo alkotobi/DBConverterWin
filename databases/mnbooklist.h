@@ -5,8 +5,11 @@
 #include <QDir>
 #include <QSqlRecord>
 #include <QSqlField>
-#include "mninit.h"
 #include <QMap>
+#include "mnrecord.h"
+#include "log.h"
+#include "./imports/mnpathes.h"
+#include "mnquery.h"
 
 
     static const QString BOOKS_LIST="booksList";
@@ -18,7 +21,7 @@ public:
     static QString getBkDbSourcePath(const QString &bkListDbSourcePath,int bkId);
     static QSqlRecord createRecord();
     static QMap<QString,QString> createFieldsMap();
-    static bool importBook(QString bkListDbSourcePath,QString bkListDbDestPath,int bkId);
+    static int importBook(QString bkListDbSourcePath,QString bkListDbDestPath,int bkId);
 };
 
 #endif // MNBOOKLIST_H

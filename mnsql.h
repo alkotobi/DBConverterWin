@@ -8,9 +8,20 @@
 #include <QSqlQuery>
 
 
-QString createTableSql(const QSqlRecord &rcd,QString tableName);
+struct PreparedQueryResult{
+public:
+    QString preparedSql;
+    QMap<QString,QVariant> values;
+
+};
 QString insetSql(const QSqlRecord &rcd,QString tableName);
 
+class MNSql{
+
+public:
+    static QString sqlCreateTable(const QSqlRecord &rcd, QString tableName);
+    static PreparedQueryResult sqlInsertPrepared(const QSqlRecord &rcd, QString tableName, QMap<QString, QString> *map);
+};
 
 
 #endif // MNSQL_H
