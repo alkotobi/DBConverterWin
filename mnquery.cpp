@@ -27,6 +27,23 @@ int MNQuery::insertRecord(QSqlRecord &recordSource, QSqlQuery &queryDest,QString
 
 }
 
+bool  MNQuery::updateRecord(const QString &dbPAth,const QString &tableName,const QString &whereSQl,const QMap<QString,QVariant> &namesAndValues){
+    QString sql ;
+    sql=MNSql::sqlUpdatePrepared(tableName,whereSQl,namesAndValues);
+    return MNQuery::execPreparedSql(dbPAth,sql,namesAndValues);
+}
+
+bool MNQuery::execPreparedSql(const QString &dbPAth,const QString &sql,const QMap<QString,QVariant> &namesAndValues){
+    QSqlQuery query(QSqlDatabase::database(dbPAth));
+    query.prepare(sql);
+    foreach(QString fieldName,namesAndValues.keys()){
+        query.bindValue(":"+fieldName,namesAndValues.value(fieldName));
+    }
+    bool bl= query.exec();
+    MN_SUCCESS( query.lastQuery());
+    return bl;
+}
+
 int MNQuery::getFirstId(QString dbPath, QString tableName,QString whereSql)
 {
     QSqlQuery query = QSqlQuery(QSqlDatabase::database(dbPath));

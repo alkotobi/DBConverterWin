@@ -71,6 +71,7 @@ PreparedQueryResult MNSql::sqlInsertPrepared(const QSqlRecord &rcd,QString table
   INSERT INTO table_name (column1, column2, column3, ...)
   VALUES (value1, value2, value3, ...);
        */
+    //TODO: split prepared sql from values list cze prepared sql will keep same
     PreparedQueryResult ret;
       QString str1=0,str2 ="",str3="";
    if(map==nullptr){// if field from dest and source are same definition
@@ -109,6 +110,17 @@ PreparedQueryResult MNSql::sqlInsertPrepared(const QSqlRecord &rcd,QString table
    return ret;
 
 
+}
+
+QString MNSql::sqlUpdatePrepared(const QString &tableName,const QString &whereSQl,const QMap<QString, QVariant> &namesAndValues)
+{
+    QString sql ;
+    foreach(QString fieldName,namesAndValues.keys()){
+        if(sql!="") sql=sql+",";
+        sql=sql+fieldName+"=:"+fieldName;
+    }
+    sql="UPDATE "+tableName+" SET "+sql+" WHERE "+whereSQl;
+    return sql;
 }
 
 

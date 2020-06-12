@@ -83,6 +83,12 @@ void MainWindow::on_bkImport_clicked()
  }
   MNAuthor::importAuthor(bkListDbSourcePath,bkListDbDestPath,bkId);
   MNBookList::importBook( bkListDbSourcePath, bkListDbDestPath, bkId );
+  QMap<QString,QVariant> map;
+  QVariant var=888888;
+  map["IDParent"]=var;
+  if(!MNQuery::updateRecord(bkListDbDestPath,AUTHOR,"ID=1",map)){
+      MN_ERROR(QSqlDatabase::database(bkListDbDestPath).lastError().text());
+  }
   //TODO: import kat
 
 
