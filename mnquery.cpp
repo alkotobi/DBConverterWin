@@ -33,6 +33,11 @@ bool  MNQuery::updateRecord(const QString &dbPAth,const QString &tableName,const
     return MNQuery::execPreparedSql(dbPAth,sql,namesAndValues);
 }
 
+/**
+  * execute a prepared sql statments fileds names and values are stored in the namesAndValues map
+  * return true if success
+  * @param &dbPAth link me
+ */
 bool MNQuery::execPreparedSql(const QString &dbPAth,const QString &sql,const QMap<QString,QVariant> &namesAndValues){
     QSqlQuery query(QSqlDatabase::database(dbPAth));
     query.prepare(sql);

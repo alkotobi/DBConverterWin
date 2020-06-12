@@ -22,6 +22,7 @@ public:
     static QSqlRecord createRecord();
     static QMap<QString,QString> createFieldsMap();
     static int importBook(QString bkListDbSourcePath,QString bkListDbDestPath,int bkId);
+    static bool updateAuthorID(int bkID,int authID);
 };
 
 #endif // MNBOOKLIST_H

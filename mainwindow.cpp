@@ -44,7 +44,7 @@ void MainWindow::on_testConvert_clicked()
 void MainWindow::on_bkImport_clicked()
 {
 
- int bkId=34460;
+ int bkId=4;
  QString bkDbDestPath;
  QString bkListDbDestPath=MNPathes::getdbBooksListPath();
  QString bkDbSourcePath ;
@@ -81,14 +81,11 @@ void MainWindow::on_bkImport_clicked()
   MN_ERROR("cant open the authors access db ");
   return;
  }
-  MNAuthor::importAuthor(bkListDbSourcePath,bkListDbDestPath,bkId);
-  MNBookList::importBook( bkListDbSourcePath, bkListDbDestPath, bkId );
-  QMap<QString,QVariant> map;
-  QVariant var=888888;
-  map["IDParent"]=var;
-  if(!MNQuery::updateRecord(bkListDbDestPath,AUTHOR,"ID=1",map)){
-      MN_ERROR(QSqlDatabase::database(bkListDbDestPath).lastError().text());
-  }
+  int authid=MNAuthor::importAuthor(bkListDbSourcePath,bkListDbDestPath,bkId);
+  int bookid=MNBookList::importBook( bkListDbSourcePath, bkListDbDestPath, bkId );
+  MNBookList::updateAuthorID( bookid,  authid);
+
+
   //TODO: import kat
 
 

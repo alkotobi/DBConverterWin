@@ -16,7 +16,7 @@ QString MNBookList::getBkDbSourcePath(const QString &bkListDbSourcePath, int bkI
     }
     int archNo=qrBooksList.record().field("Archive").value().toInt();
     if(archNo!=0){//book in archive
-      QDir dir(bkListDbSourcePath);
+      QDir dir(QFileInfo(bkListDbSourcePath).absolutePath());
       if(!dir.cdUp()){
 
           return "";
@@ -68,7 +68,13 @@ QMap<QString, QString> MNBookList::createFieldsMap()
 
  return map;
 }
-
+/**
+ * @brief MNBookList::importBook return the new inserted id
+ * @param bkListDbSourcePath
+ * @param bkListDbDestPath
+ * @param bkId the mdb source book id
+ * @return normal
+ */
 int MNBookList::importBook(QString bkListDbSourcePath,QString bkListDbDestPath,int bkId )
 {
     QSqlQuery qrbkListDbSource(QSqlDatabase::database(bkListDbSourcePath));
@@ -87,5 +93,13 @@ int MNBookList::importBook(QString bkListDbSourcePath,QString bkListDbDestPath,i
         //TODO: test getFirstId
 
     }else return 0;
+
+}
+
+bool MNBookList::updateAuthorID(int bkID, int authID)
+{
+    QMap<QString,QVariant> map;
+    map["authid"]=authID;
+    return MNQuery::updateRecord(MNPathes::getdbBooksListPath(),BOOKS_LIST,"ID="+QString::number(bkID),map);
 
 }
