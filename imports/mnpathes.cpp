@@ -77,10 +77,7 @@ QString MNPathes::getFileName(QString path)
     return  fi.fileName();
 }
 
-QString MNPathes::getKotobDbPath(QString KotobDbName)
-{
-    return getKotobDir()+KotobDbName;
-}
+
 
 QString MNPathes::getAuthDbSourcePath(const QString &bkListDbSourcePath)
 {

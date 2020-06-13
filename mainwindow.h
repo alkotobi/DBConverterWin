@@ -10,6 +10,7 @@
 #include "./databases/mnbooklist.h"
 #include "./imports/mnpathes.h"
 #include "./databases/mnauthor.h"
+#include "./databases/mnmidtableslink.h"
 
 
 QT_BEGIN_NAMESPACE

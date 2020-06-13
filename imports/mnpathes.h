@@ -17,7 +17,7 @@ public:
     static QString getKotobDir();
     static QString getAppDataDir();
     static bool createKotobDir();
-    static QString getKotobDbPath(QString KotobDbName);
+
     static QString getFileName(QString path);
     static QStringList getFilesPathes();
     static bool createAppDataDirStructre();

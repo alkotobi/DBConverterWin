@@ -11,11 +11,12 @@
 #include "mnquery.h"
 #include "./imports/mnpathes.h"
 
-static QString AUTHOR="author";
+
 class MNAuthor
 {
 public:
     MNAuthor();
+    inline static QString TABLE_NAME="author";
     static QSqlRecord createRecord();
     static QMap<QString,QString> createFieldsMap();
     static int importAuthor(QString bkListDbSourcePath,QString bkListDbDestPath,int bkId);

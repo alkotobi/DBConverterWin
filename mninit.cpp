@@ -9,6 +9,8 @@ MNInit::MNInit()
 bool MNInit::createLocalDbs()
 {
     // create db
+    //TODO: handle possible errors of tables creation
+    //TODO: refactor to classes
      QString bkListDbDestPath=MNPathes::getdbBooksListPath();
      if (not MNDb::openSqliteDb(bkListDbDestPath)){
          MN_ERROR("cant open sqlite database");
@@ -16,13 +18,10 @@ bool MNInit::createLocalDbs()
      }
 
      //create books table
-     QSqlRecord rcd= MNBookList::createRecord();
-     QString sql=MNSql::sqlCreateTable(rcd,BOOKS_LIST);
-     QSqlQuery query=QSqlQuery(QSqlDatabase::database(bkListDbDestPath));
-     query.exec(sql);
-      rcd= MNAuthor::createRecord();
-      sql=MNSql::sqlCreateTable(rcd,AUTHOR);
-     query.exec(sql);
+
+     MNQuery::createTable(bkListDbDestPath,MNBookList::createRecord(),MNBookList::TABLE_NAME);
+     MNQuery::createTable(bkListDbDestPath,MNAuthor::createRecord(),MNAuthor::TABLE_NAME);
+     MNMidleTableLink(bkListDbDestPath,MNBookList::TABLE_NAME,MNAuthor::TABLE_NAME).createTable();
      MNDb::closeDb(bkListDbDestPath);
      return true;
 

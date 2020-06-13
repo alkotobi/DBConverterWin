@@ -2,7 +2,7 @@ QT       += core gui sql widgets
 PACKAGECONFIG_append_pn-qtbase = "sql-sqlite"
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++17
 
 
 # The following define makes your compiler emit warnings if you use
@@ -19,6 +19,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     databases/mnauthor.cpp \
     databases/mnbooklist.cpp \
+    databases/mnbookscat.cpp \
+    databases/mnmidtableslink.cpp \
+    databases/mntable.cpp \
     imports/mndb.cpp \
     imports/mnimport.cpp \
     imports/mnpathes.cpp \
@@ -34,6 +37,9 @@ HEADERS += \
     MNConst.h \
     databases/mnauthor.h \
     databases/mnbooklist.h \
+    databases/mnbookscat.h \
+    databases/mnmidtableslink.h \
+    databases/mntable.h \
     imports/mndb.h \
     imports/mnimport.h \
     imports/mnpathes.h \

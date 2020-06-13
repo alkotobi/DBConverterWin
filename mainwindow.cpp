@@ -84,6 +84,7 @@ void MainWindow::on_bkImport_clicked()
   int authid=MNAuthor::importAuthor(bkListDbSourcePath,bkListDbDestPath,bkId);
   int bookid=MNBookList::importBook( bkListDbSourcePath, bkListDbDestPath, bkId );
   MNBookList::updateAuthorID( bookid,  authid);
+  MNMidleTableLink(bkListDbDestPath,MNBookList::TABLE_NAME,MNAuthor::TABLE_NAME).linkLeftToRight(bookid,authid);
 
 
   //TODO: import kat

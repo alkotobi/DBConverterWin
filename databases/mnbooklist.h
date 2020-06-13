@@ -10,19 +10,22 @@
 #include "log.h"
 #include "./imports/mnpathes.h"
 #include "mnquery.h"
+#include "databases/mntable.h"
 
 
-    static const QString BOOKS_LIST="booksList";
+
 class MNBookList
 {
 public:
     MNBookList();
-
+    inline static const QString TABLE_NAME="booksList";
     static QString getBkDbSourcePath(const QString &bkListDbSourcePath,int bkId);
-    static QSqlRecord createRecord();
+    static QSqlRecord createRecord() ;
+    static QString getTableName() ;
     static QMap<QString,QString> createFieldsMap();
     static int importBook(QString bkListDbSourcePath,QString bkListDbDestPath,int bkId);
     static bool updateAuthorID(int bkID,int authID);
+
 };
 
 #endif // MNBOOKLIST_H

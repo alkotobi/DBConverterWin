@@ -57,6 +57,11 @@ QSqlRecord MNBookList::createRecord()
 
 }
 
+QString MNBookList::getTableName()
+{
+    return TABLE_NAME;
+}
+
 QMap<QString, QString> MNBookList::createFieldsMap()
 {
  QMap<QString,QString> map;
@@ -85,9 +90,9 @@ int MNBookList::importBook(QString bkListDbSourcePath,QString bkListDbDestPath,i
         QSqlRecord rcd =qrbkListDbSource.record();
         QSqlQuery qrBkListDest =QSqlQuery(QSqlDatabase::database(bkListDbDestPath));
         //check if the book exists
-        int id=MNQuery::getFirstId(bkListDbDestPath,BOOKS_LIST,"bkid ="+QString::number(bkId));
+        int id=MNQuery::getFirstId(bkListDbDestPath,TABLE_NAME,"bkid ="+QString::number(bkId));
         if(id!=0) return id;
-        return MNQuery::insertRecord(rcd,qrBkListDest,BOOKS_LIST,
+        return MNQuery::insertRecord(rcd,qrBkListDest,TABLE_NAME,
                            bkListDbDestPath+".txt",map);
         //TODO: update id
         //TODO: test getFirstId
@@ -100,6 +105,8 @@ bool MNBookList::updateAuthorID(int bkID, int authID)
 {
     QMap<QString,QVariant> map;
     map["authid"]=authID;
-    return MNQuery::updateRecord(MNPathes::getdbBooksListPath(),BOOKS_LIST,"ID="+QString::number(bkID),map);
+    return MNQuery::updateRecord(MNPathes::getdbBooksListPath(),TABLE_NAME,"ID="+QString::number(bkID),map);
 
 }
+
+

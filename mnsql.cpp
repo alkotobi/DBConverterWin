@@ -73,7 +73,7 @@ PreparedQueryResult MNSql::sqlInsertPrepared(const QSqlRecord &rcd,QString table
        */
     //TODO: split prepared sql from values list cze prepared sql will keep same
     PreparedQueryResult ret;
-      QString str1=0,str2 ="",str3="";
+      QString str1="",str2 ="",str3="";
    if(map==nullptr){// if field from dest and source are same definition
       for(int i=0;i<rcd.count();i++){
            QSqlField fld= rcd.field(i);
@@ -121,6 +121,20 @@ QString MNSql::sqlUpdatePrepared(const QString &tableName,const QString &whereSQ
     }
     sql="UPDATE "+tableName+" SET "+sql+" WHERE "+whereSQl;
     return sql;
+}
+
+QString MNSql::sqlInsertPrepared(const QString &tableName,const QMap<QString,QVariant> &namesAndValues){
+    QString str1,str2;
+    foreach(QString key,namesAndValues.keys()){
+        if(str1!="") str1=str1+",";//coma only if have items before
+        str1 =str1+"["+key+"]";
+        if(str2!="") str2=str2+",";//coma only if have items before
+        str2=str2+":"+key;
+    }
+    str1 ="INSERT INTO ["+tableName+"] ("+str1+") ";
+    str2 =" VALUES ("+str2+");";
+
+    return  str1+str2;
 }
 
 

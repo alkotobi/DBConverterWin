@@ -15,6 +15,9 @@ public:
     static int getFirstId(QString dbPath, QString tableName, QString whereSql);
     static bool updateRecord(const QString &dbPAth, const QString &tableName, const QString &whereSQl, const QMap<QString, QVariant> &namesAndValues);
     static bool execPreparedSql(const QString &dbPAth, const QString &sql, const QMap<QString, QVariant> &namesAndValues);
+    static bool tableExists(const QString &dbPath,const QString &tableName);
+    static bool execSQl(const QString &dbPath,const QString &sql);
+    static bool createTable(const QString &dbPath,const QSqlRecord &record,const QString &tableName);
 };
 
 #endif // MNQUERY_H

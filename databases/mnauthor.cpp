@@ -48,14 +48,14 @@ int MNAuthor::importAuthor(QString bkListDbSourcePath, QString bkListDbDestPath,
         MN_SUCCESS(qrbkListDbSource.record().field(0).value().toString());
         QSqlQuery qrAuthDbSource(QSqlDatabase::database(authDbPath));
         //check if the author exists
-        int id=MNQuery::getFirstId(bkListDbDestPath,AUTHOR,"authId ="+QString::number(authId));
+        int id=MNQuery::getFirstId(bkListDbDestPath,TABLE_NAME,"authId ="+QString::number(authId));
         if(id!=0) return id;
         qrAuthDbSource.exec("select * from [Auth] where authid="+QString::number(authId));
         if(qrAuthDbSource.first()){
             QMap<QString,QString> map = createFieldsMap();
             QSqlRecord rcd =qrAuthDbSource.record();
             QSqlQuery qrBkListDest =QSqlQuery(QSqlDatabase::database(bkListDbDestPath));
-            return MNQuery::insertRecord(rcd,qrBkListDest,AUTHOR,
+            return MNQuery::insertRecord(rcd,qrBkListDest,TABLE_NAME,
                                bkListDbDestPath+".txt",map);
         }
     }

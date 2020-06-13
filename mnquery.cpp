@@ -49,6 +49,22 @@ bool MNQuery::execPreparedSql(const QString &dbPAth,const QString &sql,const QMa
     return bl;
 }
 
+bool MNQuery::tableExists(const QString &dbPath, const QString &tableName)
+{
+    return QSqlDatabase::database(dbPath).tables().contains(tableName);
+}
+
+bool MNQuery::execSQl(const QString &dbPath, const QString &sql)
+{
+    return QSqlQuery(QSqlDatabase::database(dbPath)).exec(sql);
+}
+
+bool MNQuery::createTable(const QString &dbPath, const QSqlRecord &record, const QString &tableName)
+{
+    return MNQuery::execSQl(dbPath,MNSql::sqlCreateTable(record,tableName));
+
+}
+
 int MNQuery::getFirstId(QString dbPath, QString tableName,QString whereSql)
 {
     QSqlQuery query = QSqlQuery(QSqlDatabase::database(dbPath));
