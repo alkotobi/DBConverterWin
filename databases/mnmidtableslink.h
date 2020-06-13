@@ -20,6 +20,7 @@ class MNMidleTableLink
          QString m_dbPath;
          QSqlRecord m_record;
          bool m_isNeedSwitch =false;
+         const QString ORDER_NAME="order";
 public:
     MNMidleTableLink(const QString &dbPath, const QString &leftTableName, const QString &rightTableName);
 
@@ -42,6 +43,7 @@ public:
       */
      bool isNeedSwitch() const;
      void setIsNeedSwitch(bool isNeedSwitch);
+     QString orderFldName() const;
 };
 
 #endif // MNMIDTABLESLINK_H

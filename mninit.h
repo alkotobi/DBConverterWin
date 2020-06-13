@@ -7,6 +7,7 @@
 #include "./databases/mnbooklist.h"
 #include "./databases/mnauthor.h"
 #include "./databases/mnmidtableslink.h"
+#include "./databases/mncat.h"
 
 
 class MNInit

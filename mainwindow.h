@@ -11,6 +11,7 @@
 #include "./imports/mnpathes.h"
 #include "./databases/mnauthor.h"
 #include "./databases/mnmidtableslink.h"
+#include "./databases/mncat.h"
 
 
 QT_BEGIN_NAMESPACE

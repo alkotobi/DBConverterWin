@@ -65,18 +65,23 @@ void MNMidleTableLink::setIsNeedSwitch(bool isNeedSwitch)
     m_isNeedSwitch = isNeedSwitch;
 }
 
+QString MNMidleTableLink::orderFldName() const
+{
+    return  ORDER_NAME;
+}
+
 MNMidleTableLink::MNMidleTableLink(const QString &dbPath,const QString &leftTableName,const QString &rightTableName )
 {
     setDbPath(dbPath);
     //first check if table already exists  to correspond the correct right and left side
     if(!MNQuery::tableExists(dbPath,rightTableName+"_"+leftTableName)){
-    setLeftIdName(leftTableName+"ID");
-    setRightIdName(rightTableName+"ID");
+    setLeftIdName(leftTableName+"1ID");// i use 1ID and 2ID to solve the situation where leftTableName=rightTableName
+    setRightIdName(rightTableName+"2ID");
     setTableName(leftTableName+"_"+rightTableName);
     setIsNeedSwitch(false);
     }else{
-    setLeftIdName(rightTableName+"ID");
-    setRightIdName(leftTableName+"ID");
+    setLeftIdName(rightTableName+"2ID");
+    setRightIdName(leftTableName+"1ID");
     setTableName(rightTableName+"_"+leftTableName);
     setIsNeedSwitch(true);
     }
@@ -88,6 +93,7 @@ MNMidleTableLink::MNMidleTableLink(const QString &dbPath,const QString &leftTabl
     QSqlRecord rcd;
     rcd.append(QSqlField(leftIdName(),QVariant::Int));
     rcd.append(QSqlField(rightIdName(),QVariant::Int));
+    rcd.append(QSqlField(orderFldName(),QVariant::Int));
     setRecord(rcd);
 }
 

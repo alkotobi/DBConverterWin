@@ -20,6 +20,7 @@ SOURCES += \
     databases/mnauthor.cpp \
     databases/mnbooklist.cpp \
     databases/mnbookscat.cpp \
+    databases/mncat.cpp \
     databases/mnmidtableslink.cpp \
     databases/mntable.cpp \
     imports/mndb.cpp \
@@ -38,6 +39,7 @@ HEADERS += \
     databases/mnauthor.h \
     databases/mnbooklist.h \
     databases/mnbookscat.h \
+    databases/mncat.h \
     databases/mnmidtableslink.h \
     databases/mntable.h \
     imports/mndb.h \
