@@ -12,6 +12,7 @@
 #include "mnquery.h"
 #include "./imports/mnpathes.h"
 #include "./databases/mnmidtableslink.h"
+#include "./databases/mntable.h"
 
 class MNCat
 {
@@ -20,8 +21,9 @@ public:
     inline static QString TABLE_NAME="cat";
     static QSqlRecord createRecord();
     static QMap<QString, QString> createFieldsMap();
-    static int importCat(QString bkListDbSourcePath, QString bkListDbDestPath, int bkId);
     static bool importAllCat(QString bkListDbSourcePath);
+    static int getSourceCatId(const int &bkId);
+    static bool createTable();
 };
 
 #endif // MNCAT_H

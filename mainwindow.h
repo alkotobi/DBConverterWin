@@ -31,6 +31,8 @@ private slots:
 
     void on_bkImport_clicked();
 
+    void on_importCats_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

@@ -61,3 +61,8 @@ int MNAuthor::importAuthor(QString bkListDbSourcePath, QString bkListDbDestPath,
     }
     return 0;
 }
+
+bool MNAuthor::createTable()
+{
+    return CREATE_TABLE;
+}

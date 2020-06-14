@@ -32,29 +32,7 @@ QMap<QString, QString> MNCat::createFieldsMap()
 
 
 
-int MNCat::importCat(QString bkListDbSourcePath, QString bkListDbDestPath, int bkId)
-{
-    QSqlQuery qrbkListDbSource(QSqlDatabase::database(bkListDbSourcePath));
-    QString authDbPath=MNPathes::getAuthDbSourcePath(bkListDbSourcePath);
-    qrbkListDbSource.exec("select authno from [0bok] where bkid="+QString::number(bkId));
-    if(qrbkListDbSource.first()){
-        int authId=qrbkListDbSource.record().field(0).value().toInt();
-        MN_SUCCESS(qrbkListDbSource.record().field(0).value().toString());
-        QSqlQuery qrAuthDbSource(QSqlDatabase::database(authDbPath));
-        //check if the author exists
-        int id=MNQuery::getFirstId(bkListDbDestPath,TABLE_NAME,"authId ="+QString::number(authId));
-        if(id!=0) return id;
-        qrAuthDbSource.exec("select * from [Auth] where authid="+QString::number(authId));
-        if(qrAuthDbSource.first()){
-            QMap<QString,QString> map = createFieldsMap();
-            QSqlRecord rcd =qrAuthDbSource.record();
-            QSqlQuery qrBkListDest =QSqlQuery(QSqlDatabase::database(bkListDbDestPath));
-            return MNQuery::insertRecord(rcd,qrBkListDest,TABLE_NAME,
-                               bkListDbDestPath+".txt",map);
-        }
-    }
-    return 0;
-}
+
 
 bool MNCat::importAllCat(QString bkListDbSourcePath)
 {
@@ -81,6 +59,26 @@ bool MNCat::importAllCat(QString bkListDbSourcePath)
     }
 
     return  true;
+}
+
+int MNCat::getSourceCatId(const int &bkId)
+{
+     QSqlQuery qrbkListDbDest(QSqlDatabase::database(MNPathes::getdbBooksListPath()));
+     qrbkListDbDest.exec("select catId from booksList where id="+QString::number(bkId));
+     if(qrbkListDbDest.first()){
+             QString id= qrbkListDbDest.record().field(0).value().toString();
+             qrbkListDbDest.exec("select ID from cat where catid="+id);
+             if (qrbkListDbDest.first()){
+                 return qrbkListDbDest.record().field(0).value().toInt();
+             }
+
+     }
+     return 0;
+}
+
+bool MNCat::createTable()
+{
+ return CREATE_TABLE;
 }
 
 //TODO order staff

@@ -85,14 +85,21 @@ void MainWindow::on_bkImport_clicked()
   int bookid=MNBookList::importBook( bkListDbSourcePath, bkListDbDestPath, bkId );
   MNBookList::updateAuthorID( bookid,  authid);
   MNMidleTableLink(bkListDbDestPath,MNBookList::TABLE_NAME,MNAuthor::TABLE_NAME).linkLeftToRight(bookid,authid);
-  MNCat::importAllCat(bkListDbSourcePath);
-
-  //TODO: import kat
-
-
+  //MNCat::importAllCat(bkListDbSourcePath);
+  int catId=MNCat::getSourceCatId(bookid);
+  MNMidleTableLink(bkListDbDestPath,MNBookList::TABLE_NAME,MNCat::TABLE_NAME).linkLeftToRight(bookid,catId);
  //close dbs
  MNDb::closeDb(bkListDbDestPath);
  MNDb::closeDb(bkListDbSourcePath);
  MNDb::closeDb(bkDbSourcePath);
 
+}
+
+void MainWindow::on_importCats_clicked()
+{
+    QString bkListDbSourcePath=QFileDialog::getOpenFileName(this,
+                             "Open Source DB", "", "ACCESS DB (*.mdb)");//main.mdb
+    MNDb::openMsAccessDb(bkListDbSourcePath);
+    MNCat::importAllCat(bkListDbSourcePath);
+    MNDb::closeDb(bkListDbSourcePath);
 }

@@ -52,7 +52,13 @@ void MNMidleTableLink::setDbPath(const QString &dbPath)
 
 bool MNMidleTableLink::createTable()
 {
-   return MNQuery::execSQl(dbPath(),MNSql::sqlCreateTable(record(),tableName()));
+   bool success= MNQuery::execSQl(dbPath(),MNSql::sqlCreateTable(record(),tableName()));
+   QList<QString> fieldsNames;
+   fieldsNames.append(leftIdName());
+   fieldsNames.append(rightIdName());
+   QString indName=tableName()+"_"+ fieldsNames.join("_");
+   success=success and MNQuery::createIndex(dbPath(),tableName(),indName,true,fieldsNames);
+   return success;
 }
 
 bool MNMidleTableLink::isNeedSwitch() const
@@ -122,3 +128,5 @@ bool MNMidleTableLink::linkLeftToRight(int leftVal, int rightVal)
 
 
 }
+
+

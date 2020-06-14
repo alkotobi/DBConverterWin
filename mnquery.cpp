@@ -65,10 +65,55 @@ bool MNQuery::createTable(const QString &dbPath, const QSqlRecord &record, const
 
 }
 
+bool MNQuery::createIndex(const QString &dbPath, const QString &tableName, const QString &indName, const bool &isUnic, const QList<QString> &fieldsList)
+{
+    /*
+    CREATE UNIQUE INDEX "nono" ON "author" (
+    "shortName"	ASC,
+    "info"	ASC
+     );
+     */
+    QString unic;
+    if(isUnic)unic ="UNIQUE"; else unic="";
+    QString sql = "CREATE "+unic+" INDEX '"+indName+"' ON '"+tableName+"' (";
+    QString fls;
+    foreach(QString fld,fieldsList){
+        if(fls!="") fls=fls+",";
+        fls=fls+"'"+fld+"'";
+    }
+    sql=sql+fls+");";
+    QSqlQuery query = QSqlQuery(QSqlDatabase::database(dbPath));
+    MN_WARNING(sql);
+    return query.exec(sql);
+
+}
+
+bool MNQuery::isTableEmpty(const QString &dbPath, const QString &tableName)
+{
+        QSqlQuery query = QSqlQuery(QSqlDatabase::database(dbPath));
+        query.exec("select * from "+tableName);
+        return query.size()==0;
+}
+
+int MNQuery::recordsCount(const QString &dbPath, const QString &tableName, QString whereSql)
+{
+    QSqlQuery query = QSqlQuery(QSqlDatabase::database(dbPath));
+    QString where;
+    if(whereSql!="") where=" WHERE "+whereSql;
+    QString sql = "SELECT COUNT(*) from "+tableName+where;
+    query.exec(sql);
+    if(query.first()){
+        return query.record().field(0).value().toInt();
+    }
+    return 0;
+}
+
 int MNQuery::getFirstId(QString dbPath, QString tableName,QString whereSql)
 {
     QSqlQuery query = QSqlQuery(QSqlDatabase::database(dbPath));
-    QString sql = "select ID from "+tableName+" where "+whereSql +" limit 1;";
+    QString where;
+    if(whereSql!="") where=" WHERE "+whereSql;
+    QString sql = "select ID from "+tableName+where +" limit 1;";
     query.exec(sql);
     if(query.first()){
         return query.record().field(0).value().toInt();

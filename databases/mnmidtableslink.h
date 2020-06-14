@@ -11,6 +11,7 @@
 #include "log.h"
 #include "mnquery.h"
 #include "./imports/mnpathes.h"
+#include "./databases/mntable.h"
 
 class MNMidleTableLink
 {

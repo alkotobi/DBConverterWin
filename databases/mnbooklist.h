@@ -25,6 +25,7 @@ public:
     static QMap<QString,QString> createFieldsMap();
     static int importBook(QString bkListDbSourcePath,QString bkListDbDestPath,int bkId);
     static bool updateAuthorID(int bkID,int authID);
+    static bool createTable();
 
 };
 

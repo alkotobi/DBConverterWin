@@ -109,4 +109,9 @@ bool MNBookList::updateAuthorID(int bkID, int authID)
 
 }
 
+bool MNBookList::createTable()
+{
+ return CREATE_TABLE;
+}
+
 
