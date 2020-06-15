@@ -1,10 +1,6 @@
 #ifndef MNAUTHOR_H
 #define MNAUTHOR_H
 #include <QString>
-#include <QSqlQuery>
-#include <QDir>
-#include <QSqlRecord>
-#include <QSqlField>
 #include <QMap>
 #include "mnrecord.h"
 #include "log.h"

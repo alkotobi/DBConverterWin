@@ -18,10 +18,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     databases/mnauthor.cpp \
+    databases/mnbook.cpp \
     databases/mnbooklist.cpp \
     databases/mncat.cpp \
     databases/mnmidtableslink.cpp \
+    databases/mnpage.cpp \
+    databases/mnsearchbook.cpp \
     databases/mntable.cpp \
+    databases/mntachkil.cpp \
+    databases/mnwords.cpp \
     imports/mndb.cpp \
     imports/mnimport.cpp \
     imports/mnpathes.cpp \
@@ -29,6 +34,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mninit.cpp \
+    mnnass.cpp \
     mnquery.cpp \
     mnrecord.cpp \
     mnsql.cpp
@@ -36,16 +42,22 @@ SOURCES += \
 HEADERS += \
     MNConst.h \
     databases/mnauthor.h \
+    databases/mnbook.h \
     databases/mnbooklist.h \
     databases/mncat.h \
     databases/mnmidtableslink.h \
+    databases/mnpage.h \
+    databases/mnsearchbook.h \
     databases/mntable.h \
+    databases/mntachkil.h \
+    databases/mnwords.h \
     imports/mndb.h \
     imports/mnimport.h \
     imports/mnpathes.h \
     log.h \
     mainwindow.h \
     mninit.h \
+    mnnass.h \
     mnquery.h \
     mnrecord.h \
     mnsql.h

@@ -109,24 +109,32 @@ MNMidleTableLink::MNMidleTableLink(const QString &dbPath,const QString &leftTabl
  * @param rightVal
  * @return
  */
-bool MNMidleTableLink::linkLeftToRight(int leftVal, int rightVal)
+int MNMidleTableLink::linkLeftToRight(int leftVal, int rightVal)
 {
     //TODO: make faster
-    QSqlQuery query(QSqlDatabase::database(dbPath()));
+
+    // check if link already exists and map fields
     QMap<QString,QVariant> map;
-    if(!isNeedSwitch()){
-    map[leftIdName()]=leftVal;
-    map[rightIdName()]=rightVal;
+    QString where;
+    if (isNeedSwitch()){
+        where = leftIdName()+"="+QString::number(rightVal)+
+                " and "+rightIdName()+"="+QString::number(leftVal);
+        map[leftIdName()]=rightVal;
+        map[rightIdName()]=leftVal;
     }else{
-    map[leftIdName()]=rightVal;
-    map[rightIdName()]=leftVal;
+        where = leftIdName()+"="+QString::number(leftVal)+
+                " and "+rightIdName()+"="+QString::number(rightVal);
+        map[leftIdName()]=leftVal;
+        map[rightIdName()]=rightVal;
     }
+    int id=MNQuery::getFirstId(dbPath(),tableName(),where);
+    if(id!=0) return id;
+    // emd check link already exists and map fields
+
     QString sql =MNSql::sqlInsertPrepared(tableName(),map);
    // sql ="INSERT INTO "+tableName()+" ("+leftIdName()+","+rightIdName()+")"
    //         "VALUES( "+QString::number(leftVal)+",	"+QString::number(rightVal)+");";
-    return MNQuery::execPreparedSql(dbPath(),sql,map);
-
-
+    return MNQuery::execPreparedInsertSql(dbPath(),sql,map);
 }
 
 

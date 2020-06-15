@@ -2,10 +2,6 @@
 #define MNCAT_H
 
 #include <QString>
-#include <QSqlQuery>
-#include <QDir>
-#include <QSqlRecord>
-#include <QSqlField>
 #include <QMap>
 #include "mnrecord.h"
 #include "log.h"

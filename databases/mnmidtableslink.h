@@ -2,10 +2,6 @@
 #define MNMIDTABLESLINK_H
 
 #include <QString>
-#include <QSqlQuery>
-#include <QDir>
-#include <QSqlRecord>
-#include <QSqlField>
 #include <QMap>
 #include "mnrecord.h"
 #include "log.h"
@@ -26,7 +22,7 @@ public:
     MNMidleTableLink(const QString &dbPath, const QString &leftTableName, const QString &rightTableName);
 
      void createRecord();
-     bool linkLeftToRight(int leftVal, int rightVal);
+     int linkLeftToRight(int leftVal, int rightVal);
      QString tableName() const;
      void setTableName(const QString &tableName);
      QString leftIdName() const;

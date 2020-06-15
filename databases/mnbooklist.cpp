@@ -111,7 +111,7 @@ bool MNBookList::updateAuthorID(int bkID, int authID)
 
 bool MNBookList::createTable()
 {
- return CREATE_TABLE;
+ return MNQuery::createTable(MNPathes::getdbBooksListPath(),createRecord(),TABLE_NAME);
 }
 
 

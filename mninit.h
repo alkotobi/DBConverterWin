@@ -8,6 +8,8 @@
 #include "./databases/mnauthor.h"
 #include "./databases/mnmidtableslink.h"
 #include "./databases/mncat.h"
+#include "./databases/mnwords.h"
+#include "./databases/mntachkil.h"
 
 
 class MNInit

@@ -11,7 +11,8 @@
 #include "./imports/mnpathes.h"
 
 
-#define CREATE_TABLE  MNQuery::createTable(MNPathes::getdbBooksListPath(),createRecord(),TABLE_NAME)
+
+
 
 class MNTable
 {

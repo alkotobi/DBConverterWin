@@ -23,6 +23,9 @@ public:
     static bool createAppDataDirStructre();
     static QString getdbBooksListPath();
     static QString getAuthDbSourcePath(const QString &bkListDbSourcePath);
+    static QString getdbSearchPath();
+
+    static QString getDbBookPath(const int &bkId);
 };
 
 #endif // MNPATHES_H

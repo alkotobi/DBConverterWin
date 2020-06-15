@@ -87,3 +87,14 @@ QString MNPathes::getAuthDbSourcePath(const QString &bkListDbSourcePath)
                                    "special.mdb");
     return path;
 }
+
+QString MNPathes::getdbSearchPath()
+{
+    return QDir::cleanPath(getKotobDir() + QDir::separator() + "search.sqlite");
+}
+
+
+QString MNPathes::getDbBookPath(const int &bkId)
+{
+    return QDir::cleanPath(getKotobDir() + QDir::separator() + QString::number(bkId)+".sqlite");
+}

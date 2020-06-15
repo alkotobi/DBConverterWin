@@ -30,7 +30,7 @@ int MNQuery::insertRecord(QSqlRecord &recordSource, QSqlQuery &queryDest,QString
 bool  MNQuery::updateRecord(const QString &dbPAth,const QString &tableName,const QString &whereSQl,const QMap<QString,QVariant> &namesAndValues){
     QString sql ;
     sql=MNSql::sqlUpdatePrepared(tableName,whereSQl,namesAndValues);
-    return MNQuery::execPreparedSql(dbPAth,sql,namesAndValues);
+    return MNQuery::execSql(dbPAth,sql,namesAndValues);
 }
 
 /**
@@ -38,7 +38,7 @@ bool  MNQuery::updateRecord(const QString &dbPAth,const QString &tableName,const
   * return true if success
   * @param &dbPAth link me
  */
-bool MNQuery::execPreparedSql(const QString &dbPAth,const QString &sql,const QMap<QString,QVariant> &namesAndValues){
+bool MNQuery::execSql(const QString &dbPAth,const QString &sql,const QMap<QString,QVariant> &namesAndValues){
     QSqlQuery query(QSqlDatabase::database(dbPAth));
     query.prepare(sql);
     foreach(QString fieldName,namesAndValues.keys()){
@@ -48,6 +48,55 @@ bool MNQuery::execPreparedSql(const QString &dbPAth,const QString &sql,const QMa
     MN_SUCCESS( query.lastQuery());
     return bl;
 }
+
+int MNQuery::execPreparedInsertSql(const QString &dbPAth,const QString &sql,const QMap<QString,QVariant> &namesAndValues){
+    QSqlQuery query(QSqlDatabase::database(dbPAth));
+    query.prepare(sql);
+    foreach(QString fieldName,namesAndValues.keys()){
+        query.bindValue(":"+fieldName,namesAndValues.value(fieldName));
+    }
+    if (query.exec()) return query.lastInsertId().toInt();else return 0;
+}
+
+int MNQuery::execPreparedInsertSql(const QString &dbPAth, const QString &sql, const QList<QVariant> &Values)
+{
+    QSqlQuery query(QSqlDatabase::database(dbPAth));
+    query.prepare(sql);
+    foreach(QVariant val,Values){
+        query.addBindValue(val);
+    }
+    if (query.exec()) return query.lastInsertId().toInt();else return 0;
+}
+
+int MNQuery::execInsertSql(const QString &dbPAth, const QString &tableName,const QString &field, const QVariant &value)
+{
+    QString sql;
+    sql= "INSERT INTO "+tableName+"("+field+") VALUES(:"+field+");";
+    QSqlQuery query(QSqlDatabase::database(dbPAth));
+    query.prepare(sql);
+    query.bindValue(":"+field,value);
+    if (query.exec()) return query.lastInsertId().toInt();else return 0;
+}
+
+int MNQuery::execInsertSqlIfNotExists(const QString &dbPAth, const QString &tableName, const QString &field, const QVariant &value)
+{
+    int id = getFirstId(dbPAth,tableName,field,value);
+    if(id!=0) return id;
+    return execInsertSql(dbPAth,tableName,field,value);
+}
+
+int MNQuery::getFirstId(const QString &dbPAth, const QString &tableName, const QString &field, const QVariant &value)
+{
+    QString sql = "SELECT ID from "+tableName+" WHERE "+field+"=:"+field+" LIMIT 1";
+    QSqlQuery query(QSqlDatabase::database(dbPAth));
+    query.prepare(sql);
+    query.bindValue(":"+field,value);
+    query.exec();
+    if(query.first()){
+        return query.record().field(0).value().toInt();
+    }else return 0;
+}
+
 
 bool MNQuery::tableExists(const QString &dbPath, const QString &tableName)
 {

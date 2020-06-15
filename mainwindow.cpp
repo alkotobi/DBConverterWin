@@ -88,10 +88,25 @@ void MainWindow::on_bkImport_clicked()
   //MNCat::importAllCat(bkListDbSourcePath);
   int catId=MNCat::getSourceCatId(bookid);
   MNMidleTableLink(bkListDbDestPath,MNBookList::TABLE_NAME,MNCat::TABLE_NAME).linkLeftToRight(bookid,catId);
+  //import text
+  QString dbSearchPath=MNPathes::getdbSearchPath();
+  MNDb::openSqliteDb(dbSearchPath);
+  MN_SUCCESS(QString::number(MNWords::insert("tot")));
+  MN_SUCCESS(QString::number(MNWords::insert("mim")));
+  MN_SUCCESS(QString::number(MNWords::insert("tot")));
+
+  //TODO: import text
+  //TODO: searchdb
+    //TODO: words db
+    //TODO:tchkil table
+    //TODO: book db
+    //TODO: index table
+
  //close dbs
  MNDb::closeDb(bkListDbDestPath);
  MNDb::closeDb(bkListDbSourcePath);
  MNDb::closeDb(bkDbSourcePath);
+ MNDb::closeDb(dbSearchPath);
 
 }
 
@@ -102,4 +117,10 @@ void MainWindow::on_importCats_clicked()
     MNDb::openMsAccessDb(bkListDbSourcePath);
     MNCat::importAllCat(bkListDbSourcePath);
     MNDb::closeDb(bkListDbSourcePath);
+}
+
+void MainWindow::on_testNass_clicked()
+{
+  QList<MNNass::Kalimat>* list=  MNNass::getKalimat("قال تعالى: إِنَّمَا الْمُؤْمِنُونَ الَّذِينَ آمَنُوا بِاللَّهِ وَرَسُولِهِ ثُمَّ لَمْ يَرْتَابُوا الحجرات "
+                                                   " وقال تعالى: إِنَّهُمْ كَانُوا فِي شَكٍّ مُرِيبٍ (54) [سبأ: 51 - 54]");
 }

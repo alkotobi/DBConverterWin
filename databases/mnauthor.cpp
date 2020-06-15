@@ -64,5 +64,5 @@ int MNAuthor::importAuthor(QString bkListDbSourcePath, QString bkListDbDestPath,
 
 bool MNAuthor::createTable()
 {
-    return CREATE_TABLE;
+    return MNQuery::createTable(MNPathes::getdbBooksListPath(),createRecord(),TABLE_NAME);
 }

@@ -78,7 +78,7 @@ int MNCat::getSourceCatId(const int &bkId)
 
 bool MNCat::createTable()
 {
- return CREATE_TABLE;
+ return MNQuery::createTable(MNPathes::getdbBooksListPath(),createRecord(),TABLE_NAME);
 }
 
 //TODO order staff

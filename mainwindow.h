@@ -12,6 +12,8 @@
 #include "./databases/mnauthor.h"
 #include "./databases/mnmidtableslink.h"
 #include "./databases/mncat.h"
+#include "./databases/mnwords.h"
+#include "mnnass.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -32,6 +34,8 @@ private slots:
     void on_bkImport_clicked();
 
     void on_importCats_clicked();
+
+    void on_testNass_clicked();
 
 private:
     Ui::MainWindow *ui;
