@@ -11,8 +11,8 @@ QList<MNNass::Kalimat>* MNNass::getKalimat(const QString &nass)
     QString tachkil;
     QString original;
     QString norm;
-    QString diactrice="ًٌٍَُِّْ";
-    QString returnChar =QString('\t')+'\n'+'\v'+'\f'+'\r'+' ';
+    QString diactrice="ًٌٍَُِّْ";//1611>>1618
+    QString returnChar =QString('\t')+'\n'+'\v'+'\f'+'\r'+' ';//9>>13 and 32
     Kalimat kalimat;
     QList<MNNass::Kalimat>* list = new QList<MNNass::Kalimat>();
     int i=0;

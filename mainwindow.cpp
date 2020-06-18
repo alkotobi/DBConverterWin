@@ -91,22 +91,52 @@ void MainWindow::on_bkImport_clicked()
   //import text
   QString dbSearchPath=MNPathes::getdbSearchPath();
   MNDb::openSqliteDb(dbSearchPath);
-  MN_SUCCESS(QString::number(MNWords::insert("tot")));
-  MN_SUCCESS(QString::number(MNWords::insert("mim")));
-  MN_SUCCESS(QString::number(MNWords::insert("tot")));
+  MNDb::openSqliteDb(MNPathes::getDbBookPath(bkId));
+  MNBook book(bkId);
+  book.createTable();
+  MNPage pages(bkId);
+  pages.createTable();
+  MNSearchBook bksearch(bkId);
+  bksearch.createTable();
 
-  //TODO: import text
-  //TODO: searchdb
-    //TODO: words db
-    //TODO:tchkil table
-    //TODO: book db
-    //TODO: index table
+
+  //check if table is from archive or not
+  QSqlQuery bksource(QSqlDatabase::database(bkDbSourcePath));
+  if(QSqlDatabase::database(bkDbSourcePath).tables().contains("b" + QString::number(bkId))){
+     bksource.exec("select nass,page,part from b"+QString::number(bkId)) ;
+  }else{
+     bksource.exec("select nass,page,part from book") ;
+  }
+  while(bksource.next()){
+      QList<MNNass::Kalimat>* kalimat = MNNass::getKalimat(bksource.record().field("nass").value().toString());
+      QList<int> bkIds;
+      foreach(MNNass::Kalimat kalima,*kalimat){
+          int idKalima=MNWords::insert(kalima.norm);
+          int idTachkil=MNTachkil::insert(kalima.tachkil);
+          MNMidleTableLink(MNPathes::getdbSearchPath(),MNWords::TABLE_NAME,MNTachkil::TABLE_NAME).
+                  linkLeftToRight(idKalima,idTachkil);
+          int idbook = book.insert(kalima.original,idKalima);
+          bkIds<<idbook;
+          bksearch.linkBookToWord(idbook,idKalima);
+      }
+      int pageNo=bksource.record().field("page").value().toInt();
+      int tome=bksource.record().field("tome").value().toInt();
+      pages.insert(pageNo,tome,bkIds.at(0),bkIds.count());
+      delete kalimat;
+      //TODO: index
+  }
+
+
+
+
+
 
  //close dbs
  MNDb::closeDb(bkListDbDestPath);
  MNDb::closeDb(bkListDbSourcePath);
  MNDb::closeDb(bkDbSourcePath);
  MNDb::closeDb(dbSearchPath);
+   MNDb::closeDb(MNPathes::getDbBookPath(bkId));
 
 }
 

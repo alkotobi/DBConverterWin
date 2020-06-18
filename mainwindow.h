@@ -14,7 +14,10 @@
 #include "./databases/mncat.h"
 #include "./databases/mnwords.h"
 #include "mnnass.h"
-
+#include "./databases/mnbook.h"
+#include "./databases/mnpage.h"
+#include "./databases/mntachkil.h"
+#include "./databases/mnsearchbook.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

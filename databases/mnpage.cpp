@@ -35,6 +35,7 @@ void MNPage::createRecord()
    QSqlRecord rcd;
    rcd.append(QSqlField("ID",QVariant::Int));
    rcd.append(QSqlField(pageNoName(),QVariant::Int));
+   rcd.append(QSqlField(tomeName(),QVariant::Int));
    rcd.append(QSqlField(startFromWordName(),QVariant::Int));
    rcd.append(QSqlField(wordsCountName(),QVariant::Int));
    setRecord(rcd);
@@ -55,15 +56,21 @@ QString MNPage::wordsCountName() const
     return "wordsCount";
 }
 
+QString MNPage::tomeName() const
+{
+    return "tome";
+}
+
 bool MNPage::createTable()
 {
     return MNQuery::createTable(dbPath(),record(),tableName());
 }
 
-bool MNPage::insert(const int &pageNo, const int &startFrom, const int &wordsCount)
+bool MNPage::insert(const int &pageNo,const int &tome, const int &startFrom, const int &wordsCount)
 {
-    QString sql="INSERT INTO "+tableName()+"("+pageNoName()+","+startFromWordName()+","+wordsCountName()+") "+
+    QString sql="INSERT INTO "+tableName()+"("+pageNoName()+","+tomeName()+","+startFromWordName()+","+wordsCountName()+") "+
             "VALUES("+QString::number(pageNo)+","+
+            QString::number(tome)+","+
             QString::number(startFrom)+","+
             QString::number(wordsCount)+");";
     MN_WARNING(sql);

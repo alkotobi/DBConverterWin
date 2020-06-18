@@ -1,5 +1,5 @@
-#ifndef MNPAGE_H
-#define MNPAGE_H
+#ifndef MNINDEX_H
+#define MNINDEX_H
 #include <QString>
 #include <QMap>
 #include "mnrecord.h"
@@ -8,14 +8,13 @@
 #include "./imports/mnpathes.h"
 #include "./databases/mntable.h"
 
-
-class MNPage
+class MNIndex
 {
     QString m_tableName;
     QString m_dbPath;
     QSqlRecord m_record;
 public:
-    MNPage(const int &bkId);
+    MNIndex(const int &bkId);
     QString tableName() const;
     void setTableName(const QString &tableName);
     QString dbPath() const;
@@ -24,12 +23,12 @@ public:
     void setRecord(const QSqlRecord &record);
     void createRecord();
     QString pageNoName() const;
-    QString startFromWordName() const;
-    QString wordsCountName() const;
-    QString tomeName() const;
+    QString idParentName() const;
+    QString titleName() const;
     bool createTable();
-    bool insert(const int &pageNo, const int &tome, const int &startFrom, const int &wordsCount);
-
+    bool insert(const int &pageNo, const int &idParent, const QString &title);
+    
+    bool importAllCat(QString bkListDbSourcePath);
 };
 
-#endif // MNPAGE_H
+#endif // MNINDEX_H

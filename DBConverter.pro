@@ -21,6 +21,7 @@ SOURCES += \
     databases/mnbook.cpp \
     databases/mnbooklist.cpp \
     databases/mncat.cpp \
+    databases/mnindex.cpp \
     databases/mnmidtableslink.cpp \
     databases/mnpage.cpp \
     databases/mnsearchbook.cpp \
@@ -45,6 +46,7 @@ HEADERS += \
     databases/mnbook.h \
     databases/mnbooklist.h \
     databases/mncat.h \
+    databases/mnindex.h \
     databases/mnmidtableslink.h \
     databases/mnpage.h \
     databases/mnsearchbook.h \
