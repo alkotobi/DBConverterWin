@@ -18,6 +18,8 @@
 #include "./databases/mnpage.h"
 #include "./databases/mntachkil.h"
 #include "./databases/mnsearchbook.h"
+#include "./databases/mnindex.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

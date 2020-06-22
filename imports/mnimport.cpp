@@ -9,7 +9,7 @@ bool MNImport::convertMultiAccessToSqlite(QStringList dbSourcePathes,QString des
 {
     bool success=true;
     foreach(QString dbSourcePath,dbSourcePathes){
-       success= success and MNImport::convertAccessToSqlite( dbSourcePath,destDir);
+       success= success && MNImport::convertAccessToSqlite( dbSourcePath,destDir);
     }
     return success;
 }
@@ -19,14 +19,14 @@ bool MNImport::convertAccessToSqlite(QString &dbSourcePath,QString destDir)
     // check if access db file is valid
     bool success =true;
     QString logFilePath=dbSourcePath+".txt";
-    if (not MNDb::openMsAccessDb( dbSourcePath)){
+    if (! MNDb::openMsAccessDb( dbSourcePath)){
         Log::logErrToFileConsole(MNERR_CantOpenFile+dbSourcePath,logFilePath);
         return false;
     }
 
     // create sqlte db or open if exists
         QString destPath =MNPathes::combinePathes(destDir,QFileInfo(dbSourcePath).baseName()+".sqlite");
-        if(not MNDb::openSqliteDb(destPath)){
+        if(! MNDb::openSqliteDb(destPath)){
             Log::logErrToFileConsole(MNERR_CantOpenFile+destPath,logFilePath);
             return false;
         }
@@ -37,10 +37,10 @@ bool MNImport::convertAccessToSqlite(QString &dbSourcePath,QString destDir)
         QStringList list=MNDb::getDbTableNames(dbSourcePath);
         MNDb::startTransaction(destPath);
         foreach(QString name,list){
-            success=success and MNDb::exportTable(name,dbSourcePath,destPath);
+            success=success && MNDb::exportTable(name,dbSourcePath,destPath);
         }
         if(success){
-            if(not MNDb::commitTransaction(destPath)){
+            if(! MNDb::commitTransaction(destPath)){
                 Log::logErrToFileConsole(MNERR_CantCommitTransaction+destPath,logFilePath);
                 MNDb::rollBackTransaction(destPath);
                 return false;

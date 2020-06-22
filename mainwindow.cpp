@@ -34,7 +34,7 @@ void MainWindow::on_testConvert_clicked()
         return ;
     }
 
-    if (not MNImport::convertMultiAccessToSqlite(fileNames,destDir)){
+    if (! MNImport::convertMultiAccessToSqlite(fileNames,destDir)){
              QMessageBox messageBox;
              messageBox.critical(0,"Error","could not convert some database check logFile ");
     }
@@ -44,7 +44,7 @@ void MainWindow::on_testConvert_clicked()
 void MainWindow::on_bkImport_clicked()
 {
 
- int bkId=4;
+ int bkId=21710;
  QString bkDbDestPath;
  QString bkListDbDestPath=MNPathes::getdbBooksListPath();
  QString bkDbSourcePath ;
@@ -55,10 +55,10 @@ void MainWindow::on_bkImport_clicked()
 
 
 
- if (not MNDb::openSqliteDb(bkListDbDestPath)){
+ if (! MNDb::openSqliteDb(bkListDbDestPath)){
      MN_ERROR("cant open sqlite database");
  }
- if(not MNDb::openMsAccessDb(bkListDbSourcePath)){
+ if(! MNDb::openMsAccessDb(bkListDbSourcePath)){
      MN_ERROR("cant open main.mdb");
  }
 
@@ -71,13 +71,13 @@ void MainWindow::on_bkImport_clicked()
      return ;
  }
 
- if(not MNDb::openMsAccessDb(bkDbSourcePath)){
+ if(! MNDb::openMsAccessDb(bkDbSourcePath)){
      MN_ERROR("cant open the book: "+QString::number(bkId)+".mdb");
  }
  QSqlQuery qrBkSource(QSqlDatabase::database(bkDbSourcePath));
  QSqlQuery qrbkIndex(QSqlDatabase::database(bkDbSourcePath));
  QString authDbPath=MNPathes::getAuthDbSourcePath(bkListDbSourcePath);
- if(not MNDb::openMsAccessDb(authDbPath)){
+ if(! MNDb::openMsAccessDb(authDbPath)){
   MN_ERROR("cant open the authors access db ");
   return;
  }
@@ -88,6 +88,7 @@ void MainWindow::on_bkImport_clicked()
   //MNCat::importAllCat(bkListDbSourcePath);
   int catId=MNCat::getSourceCatId(bookid);
   MNMidleTableLink(bkListDbDestPath,MNBookList::TABLE_NAME,MNCat::TABLE_NAME).linkLeftToRight(bookid,catId);
+
   //import text
   QString dbSearchPath=MNPathes::getdbSearchPath();
   MNDb::openSqliteDb(dbSearchPath);
@@ -98,7 +99,9 @@ void MainWindow::on_bkImport_clicked()
   pages.createTable();
   MNSearchBook bksearch(bkId);
   bksearch.createTable();
-
+  MNIndex index(bkId);
+  index.createTable();
+  index.importAllInd(bkDbSourcePath);
 
   //check if table is from archive or not
   QSqlQuery bksource(QSqlDatabase::database(bkDbSourcePath));
@@ -107,6 +110,9 @@ void MainWindow::on_bkImport_clicked()
   }else{
      bksource.exec("select nass,page,part from book") ;
   }
+  MNDb::startTransaction(dbSearchPath);
+  MNDb::startTransaction(MNPathes::getDbBookPath(bkId));
+  Log::setTimeStampToCurrent();
   while(bksource.next()){
       QList<MNNass::Kalimat>* kalimat = MNNass::getKalimat(bksource.record().field("nass").value().toString());
       QList<int> bkIds;
@@ -120,11 +126,13 @@ void MainWindow::on_bkImport_clicked()
           bksearch.linkBookToWord(idbook,idKalima);
       }
       int pageNo=bksource.record().field("page").value().toInt();
-      int tome=bksource.record().field("tome").value().toInt();
+      int tome=bksource.record().field("part").value().toInt();
       pages.insert(pageNo,tome,bkIds.at(0),bkIds.count());
       delete kalimat;
-      //TODO: index
   }
+  MNDb::commitTransaction(dbSearchPath);
+  MNDb::commitTransaction(MNPathes::getDbBookPath(bkId));
+  Log::showInfo("book imported");
 
 
 
@@ -145,12 +153,12 @@ void MainWindow::on_importCats_clicked()
     QString bkListDbSourcePath=QFileDialog::getOpenFileName(this,
                              "Open Source DB", "", "ACCESS DB (*.mdb)");//main.mdb
     MNDb::openMsAccessDb(bkListDbSourcePath);
+    MNDb::openSqliteDb(MNPathes::getdbBooksListPath());
     MNCat::importAllCat(bkListDbSourcePath);
     MNDb::closeDb(bkListDbSourcePath);
+    MNDb::closeDb(MNPathes::getdbBooksListPath());
 }
 
 void MainWindow::on_testNass_clicked()
 {
-  QList<MNNass::Kalimat>* list=  MNNass::getKalimat("قال تعالى: إِنَّمَا الْمُؤْمِنُونَ الَّذِينَ آمَنُوا بِاللَّهِ وَرَسُولِهِ ثُمَّ لَمْ يَرْتَابُوا الحجرات "
-                                                   " وقال تعالى: إِنَّهُمْ كَانُوا فِي شَكٍّ مُرِيبٍ (54) [سبأ: 51 - 54]");
-}
+ }

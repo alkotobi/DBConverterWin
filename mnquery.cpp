@@ -10,7 +10,7 @@ int MNQuery::insertRecord(QSqlRecord &recordSource, QSqlQuery &queryDest,QString
                         QString logFilePath ,QMap<QString, QString> &fieldsMap)
 {
     PreparedQueryResult ret = MNSql::sqlInsertPrepared(recordSource,tableName,&fieldsMap);
-    if(not queryDest.prepare(ret.preparedSql)){
+    if(! queryDest.prepare(ret.preparedSql)){
         MN_ERROR(queryDest.lastError().text());
         Log::logToFile(queryDest.lastError().text(),logFilePath);
         return 0;
@@ -19,7 +19,7 @@ int MNQuery::insertRecord(QSqlRecord &recordSource, QSqlQuery &queryDest,QString
     for (int i=0;i<count;i++) {
         queryDest.bindValue(":i"+QString::number(i),ret.values[":i"+QString::number(i)]);
     }
-    if(not queryDest.exec()){
+    if(! queryDest.exec()){
         Log::logErrToFileConsole(MNERR_CantWriteData+queryDest.lastError().text(),logFilePath);
         return 0;
     }

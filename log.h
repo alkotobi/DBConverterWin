@@ -36,6 +36,7 @@ public:
     static QString getTxtFileNameFromDate();
 };
 
+#if 0
 #ifdef  QT_DEBUG
 #define MN_ERROR(...) Log::showError( __VA_ARGS__ )
 #define MN_WARNING(...) Log::showWarning( __VA_ARGS__ )
@@ -47,4 +48,12 @@ public:
 #define MN_INFO(...)
 #define MN_SUCCESS(...)
 #endif
+
+#else
+#define MN_ERROR(...)
+#define MN_WARNING(...)
+#define MN_INFO(...)
+#define MN_SUCCESS(...)
+#endif
+
 #endif // LOG_H

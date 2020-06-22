@@ -57,7 +57,7 @@ bool MNMidleTableLink::createTable()
    fieldsNames.append(leftIdName());
    fieldsNames.append(rightIdName());
    QString indName=tableName()+"_"+ fieldsNames.join("_");
-   success=success and MNQuery::createIndex(dbPath(),tableName(),indName,true,fieldsNames);
+   success=success && MNQuery::createIndex(dbPath(),tableName(),indName,true,fieldsNames);
    return success;
 }
 

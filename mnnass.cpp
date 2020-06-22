@@ -17,7 +17,7 @@ QList<MNNass::Kalimat>* MNNass::getKalimat(const QString &nass)
     QList<MNNass::Kalimat>* list = new QList<MNNass::Kalimat>();
     int i=0;
     //ignore the wrong beginig of nass
-    while (returnChar.contains(nass[i]) and i<nass.length()) {
+    while (returnChar.contains(nass[i]) && i<nass.length()) {
         i++;
     } ;
     for (;i<nass.length();i++) {
@@ -33,7 +33,7 @@ QList<MNNass::Kalimat>* MNNass::getKalimat(const QString &nass)
             original= original+chr;
             continue;
         }else if(returnChar.contains(chr)){
-            while (returnChar.contains(nass[i]) and i<nass.length()) {
+            while (returnChar.contains(nass[i]) && i<nass.length()) {
                 original= original+chr;
                 i++; // must reduce 1 after out this
             } ;
@@ -46,7 +46,7 @@ QList<MNNass::Kalimat>* MNNass::getKalimat(const QString &nass)
             }
 
             }
-            if(not isTachkil) tachkil ="";
+            if(! isTachkil) tachkil ="";
             kalimat.norm=norm;
             kalimat.tachkil=tachkil;
             kalimat.original=original;

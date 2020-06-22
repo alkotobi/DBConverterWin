@@ -26,7 +26,7 @@ class MNDb
 public:
     MNDb();
     static bool openMsAccessDb(QString dbPath);
-    static bool openSqliteDb(QString dbPath);
+    static bool openSqliteDb(QString dbPath, bool makeFast=true);
     static QStringList getDbTableNames(QString dbPath);
     static bool startTransaction(QString dbPath);
     static bool commitTransaction(QString dbPath);

@@ -13,11 +13,11 @@ bool MNInit::createLocalDbs()
     //TODO: refactor to classes
      QString bkListDbDestPath=MNPathes::getdbBooksListPath();
      QString bkSearchDbPath = MNPathes::getdbSearchPath();
-     if (not MNDb::openSqliteDb(bkListDbDestPath)){
+     if (! MNDb::openSqliteDb(bkListDbDestPath)){
          MN_ERROR("cant open sqlite database");
          return false;
      }
-     if (not MNDb::openSqliteDb(bkSearchDbPath)){
+     if (! MNDb::openSqliteDb(bkSearchDbPath)){
          MN_ERROR("cant open search sqlite database");
          MNDb::closeDb(bkListDbDestPath);
          return false;
@@ -36,7 +36,6 @@ bool MNInit::createLocalDbs()
      MNMidleTableLink(bkSearchDbPath,MNWords::TABLE_NAME,MNTachkil::TABLE_NAME).createTable();
      MNDb::closeDb(bkListDbDestPath);
      MNDb::closeDb(bkSearchDbPath);
-
      return true;
 
 }

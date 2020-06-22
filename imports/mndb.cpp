@@ -18,13 +18,14 @@ bool MNDb::openMsAccessDb(QString dbPath)
     }
 }
 
-bool MNDb::openSqliteDb(QString dbPath)
+bool MNDb::openSqliteDb(QString dbPath,bool makeFast)
 {
     QSqlDatabase dbDest = QSqlDatabase::addDatabase("QSQLITE",dbPath);
 
     dbDest.setDatabaseName(dbPath);
     //open dfestination db
     if(dbDest.open()){
+        if(makeFast) makeSQliteDbFaster(dbPath);
         return true;
     }else{
 
@@ -53,6 +54,7 @@ bool MNDb::openSqliteDb(QString dbPath)
  void MNDb::closeDb(QString dbPath)
  {
      QSqlDatabase::database(dbPath).close();
+     QSqlDatabase::removeDatabase(dbPath);
  }
 
  bool MNDb::rollBackTransaction(QString dbPath)

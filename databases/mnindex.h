@@ -11,14 +11,13 @@
 class MNIndex
 {
     QString m_tableName;
-    QString m_dbPath;
     QSqlRecord m_record;
+    int bkId;
 public:
+    QString dbPath;
     MNIndex(const int &bkId);
     QString tableName() const;
     void setTableName(const QString &tableName);
-    QString dbPath() const;
-    void setDbPath(const QString &dbPath);
     QSqlRecord record() const;
     void setRecord(const QSqlRecord &record);
     void createRecord();
@@ -26,8 +25,9 @@ public:
     QString idParentName() const;
     QString titleName() const;
     bool createTable();
-    bool insert(const int &pageNo, const int &idParent, const QString &title);
+    int insert(const int &pageNo, const int &idParent, const QString &title);
 
+    bool importAllInd(QString bkDbSourcePath);
 };
 
 #endif // MNINDEX_H
