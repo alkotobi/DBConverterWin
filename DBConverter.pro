@@ -34,10 +34,12 @@ SOURCES += \
     log.cpp \
     main.cpp \
     mainwindow.cpp \
+    mnbookshowform.cpp \
     mninit.cpp \
     mnnass.cpp \
     mnquery.cpp \
     mnrecord.cpp \
+    mnshowbookwid.cpp \
     mnsql.cpp
 
 HEADERS += \
@@ -58,14 +60,18 @@ HEADERS += \
     imports/mnpathes.h \
     log.h \
     mainwindow.h \
+    mnbookshowform.h \
     mninit.h \
     mnnass.h \
     mnquery.h \
     mnrecord.h \
+    mnshowbookwid.h \
     mnsql.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    mnbookshowform.ui \
+    mnshowbookwid.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

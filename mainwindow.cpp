@@ -162,3 +162,9 @@ void MainWindow::on_importCats_clicked()
 void MainWindow::on_testNass_clicked()
 {
  }
+
+void MainWindow::on_bookView_clicked()
+{
+    MNBookShowForm *frm = new MNBookShowForm(this);
+    frm->show();
+}

@@ -73,6 +73,18 @@ int MNBook::insert(const QString &word, const int &wordID)
     MN_WARNING(sql);
     return  MNQuery::execPreparedInsertSql(dbPath(),sql,list);
 }
+/**
+ * @brief MNBook::getWordsList dont forget to delete the pointer after call this
+ * @param idFirst
+ * @param WordsCount
+ * @return
+ */
+void MNBook::getWordsList(const int &idFirst, const int &WordsCount,QStringList *valuesListAsStrings)
+{
+    QString sql ="SELECT "+wordName()+" from "+tableName()+" where ID>="+QString::number(idFirst)+
+            " limit "+QString::number(WordsCount);
+    MNQuery::getFirstFieldValuesListAsStrings(dbPath(),sql,valuesListAsStrings);
+}
 
 MNBook::MNBook(const int &bkId)
 {

@@ -1,0 +1,10 @@
+*.suo
+*.db
+*.ipch
+*.autosave
+debug/*
+*.sln
+x64/*
+release/*
+*.cpp.autosave
+*.h.autosave

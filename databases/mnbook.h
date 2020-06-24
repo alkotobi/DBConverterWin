@@ -30,6 +30,7 @@ public:
     void setSqlPreperedInsert(const QString &sqlPreperedInsert);
     MNBook(const int &bkId);
     int insert(const QString &word, const int &wordID);
+    void getWordsList(const int &idFirst, const int &WordsCount, QStringList *valuesListAsStrings);
 };
 
 #endif // MNBOOK_H

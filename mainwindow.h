@@ -19,6 +19,7 @@
 #include "./databases/mntachkil.h"
 #include "./databases/mnsearchbook.h"
 #include "./databases/mnindex.h"
+#include "mnbookshowform.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -41,6 +42,8 @@ private slots:
     void on_importCats_clicked();
 
     void on_testNass_clicked();
+
+    void on_bookView_clicked();
 
 private:
     Ui::MainWindow *ui;

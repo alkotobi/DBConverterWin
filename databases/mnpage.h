@@ -15,6 +15,9 @@ class MNPage
     QString m_dbPath;
     QSqlRecord m_record;
 public:
+    typedef struct {
+       int ID,pageNo,tomeNo,startFrom,wordsCount;
+    }PageInfo;
     MNPage(const int &bkId);
     QString tableName() const;
     void setTableName(const QString &tableName);
@@ -29,6 +32,7 @@ public:
     QString tomeName() const;
     bool createTable();
     bool insert(const int &pageNo, const int &tome, const int &startFrom, const int &wordsCount);
+    void getPage(const int &pageNo, const int &tome,PageInfo *pgInfo);
 
 };
 

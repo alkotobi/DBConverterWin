@@ -11,9 +11,12 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
 
@@ -23,10 +26,15 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
+    QGridLayout *gridLayout;
+    QPushButton *bookView;
+    QSpacerItem *verticalSpacer;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *testNass;
+    QPushButton *importCats;
     QPushButton *testConvert;
     QPushButton *bkImport;
-    QPushButton *importCats;
-    QPushButton *testNass;
+    QPushButton *pushButton;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -34,25 +42,54 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(461, 258);
+        MainWindow->resize(837, 527);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-        testConvert = new QPushButton(centralwidget);
-        testConvert->setObjectName(QString::fromUtf8("testConvert"));
-        testConvert->setGeometry(QRect(160, 80, 121, 51));
-        bkImport = new QPushButton(centralwidget);
-        bkImport->setObjectName(QString::fromUtf8("bkImport"));
-        bkImport->setGeometry(QRect(170, 150, 111, 41));
-        importCats = new QPushButton(centralwidget);
-        importCats->setObjectName(QString::fromUtf8("importCats"));
-        importCats->setGeometry(QRect(310, 150, 101, 41));
+        gridLayout = new QGridLayout(centralwidget);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        bookView = new QPushButton(centralwidget);
+        bookView->setObjectName(QString::fromUtf8("bookView"));
+
+        gridLayout->addWidget(bookView, 2, 1, 1, 1);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout->addItem(verticalSpacer, 0, 1, 1, 1);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         testNass = new QPushButton(centralwidget);
         testNass->setObjectName(QString::fromUtf8("testNass"));
-        testNass->setGeometry(QRect(40, 60, 91, 41));
+
+        horizontalLayout->addWidget(testNass);
+
+        importCats = new QPushButton(centralwidget);
+        importCats->setObjectName(QString::fromUtf8("importCats"));
+
+        horizontalLayout->addWidget(importCats);
+
+        testConvert = new QPushButton(centralwidget);
+        testConvert->setObjectName(QString::fromUtf8("testConvert"));
+
+        horizontalLayout->addWidget(testConvert);
+
+        bkImport = new QPushButton(centralwidget);
+        bkImport->setObjectName(QString::fromUtf8("bkImport"));
+
+        horizontalLayout->addWidget(bkImport);
+
+
+        gridLayout->addLayout(horizontalLayout, 1, 1, 1, 1);
+
+        pushButton = new QPushButton(centralwidget);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+
+        gridLayout->addWidget(pushButton, 0, 0, 1, 1);
+
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 461, 21));
+        menubar->setGeometry(QRect(0, 0, 837, 21));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -66,10 +103,12 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+        bookView->setText(QCoreApplication::translate("MainWindow", "BookVew", nullptr));
+        testNass->setText(QCoreApplication::translate("MainWindow", "testNass", nullptr));
+        importCats->setText(QCoreApplication::translate("MainWindow", "import cats", nullptr));
         testConvert->setText(QCoreApplication::translate("MainWindow", "convert db", nullptr));
         bkImport->setText(QCoreApplication::translate("MainWindow", "import book", nullptr));
-        importCats->setText(QCoreApplication::translate("MainWindow", "import cats", nullptr));
-        testNass->setText(QCoreApplication::translate("MainWindow", "testNass", nullptr));
+        pushButton->setText(QCoreApplication::translate("MainWindow", "PushButton", nullptr));
     } // retranslateUi
 
 };

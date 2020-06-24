@@ -97,6 +97,24 @@ int MNQuery::getFirstId(const QString &dbPAth, const QString &tableName, const Q
     }else return 0;
 }
 
+QSqlRecord MNQuery::getFirstRecord(const QString &dbPAth, const QString &sql)
+{
+    QSqlQuery query(QSqlDatabase::database(dbPAth));
+    query.exec(sql);
+    if(query.first()){
+        return query.record();
+    }else return QSqlRecord();
+}
+
+void MNQuery::getFirstFieldValuesListAsStrings(const QString &dbPAth, const QString &sql,QStringList *firstFieldValuesList)
+{
+    QSqlQuery query(QSqlDatabase::database(dbPAth));
+    query.exec(sql);
+    while(query.next()){
+        *firstFieldValuesList<< query.record().field(0).value().toString();
+    }
+}
+
 
 bool MNQuery::tableExists(const QString &dbPath, const QString &tableName)
 {

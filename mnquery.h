@@ -29,6 +29,8 @@ public:
     static int execInsertSql(const QString &dbPAth, const QString &tableName, const QString &field, const QVariant &value);
     static int execInsertSqlIfNotExists(const QString &dbPAth, const QString &tableName, const QString &field, const QVariant &value);
     static int getFirstId(const QString &dbPAth, const QString &tableName, const QString &field, const QVariant &value);
+    static QSqlRecord getFirstRecord(const QString &dbPAth,const QString &sql);
+    static void getFirstFieldValuesListAsStrings(const QString &dbPAth, const QString &sql, QStringList *firstFieldValuesList);
 };
 
 #endif // MNQUERY_H

@@ -77,6 +77,23 @@ bool MNPage::insert(const int &pageNo,const int &tome, const int &startFrom, con
     return  MNQuery::execSQl(dbPath(),sql);
 }
 
+void MNPage::getPage(const int &pageNo, const int &tome,PageInfo *pgInfo)
+{
+
+    QString sql = "SELECT * from "+tableName()+" where "+pageNoName()+"="+
+            QString::number(pageNo)+" and "+tomeName()+"="+QString::number(tome);
+    QSqlRecord rcd = MNQuery::getFirstRecord(dbPath(),sql);
+    if(rcd.count()>0){
+        pgInfo->ID = rcd.field(0).value().toInt();
+        pgInfo->pageNo=rcd.field(pageNoName()).value().toInt();
+        pgInfo->tomeNo=rcd.field(tomeName()).value().toInt();
+        pgInfo->startFrom=rcd.field(startFromWordName()).value().toInt();
+        pgInfo->wordsCount=rcd.field(wordsCountName()).value().toInt();
+
+    }
+
+}
+
 MNPage::MNPage(const int &bkId)
 {
     setTableName("P"+QString::number(bkId));
