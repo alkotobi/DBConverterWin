@@ -19,6 +19,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_testConvert_clicked()
 {
+#ifndef Q_OS_WIN
+    return;
+#endif
     QStringList fileNames =QFileDialog::getOpenFileNames(this,
                            "Open Source DB", "", "ACCESS DB (*.mdb)");
     if(fileNames.count()==0){
@@ -43,7 +46,9 @@ void MainWindow::on_testConvert_clicked()
 
 void MainWindow::on_bkImport_clicked()
 {
-
+#ifndef Q_OS_WIN
+    return;
+#endif
  int bkId=21710;
  QString bkDbDestPath;
  QString bkListDbDestPath=MNPathes::getdbBooksListPath();
@@ -150,6 +155,9 @@ void MainWindow::on_bkImport_clicked()
 
 void MainWindow::on_importCats_clicked()
 {
+#ifndef Q_OS_WIN
+    return;
+#endif
     QString bkListDbSourcePath=QFileDialog::getOpenFileName(this,
                              "Open Source DB", "", "ACCESS DB (*.mdb)");//main.mdb
     MNDb::openMsAccessDb(bkListDbSourcePath);
