@@ -45,6 +45,8 @@ private slots:
 
     void on_bookView_clicked();
 
+    void on_btnShamelahPath_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

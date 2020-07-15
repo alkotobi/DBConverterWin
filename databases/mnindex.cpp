@@ -26,14 +26,14 @@ void MNIndex::createRecord()
     QSqlRecord rcd;
     rcd.append(QSqlField("ID",QVariant::Int));
     rcd.append(QSqlField(idParentName(),QVariant::Int));
-    rcd.append(QSqlField(pageNoName(),QVariant::Int));
+    rcd.append(QSqlField(pageIdName(),QVariant::Int));
     rcd.append(QSqlField(titleName(),QVariant::String));
     setRecord(rcd);
 }
 
-QString MNIndex::pageNoName() const
+QString MNIndex::pageIdName() const
 {
-    return "pageNo";
+    return "pageId";
 }
 
 QString MNIndex::idParentName() const
@@ -53,7 +53,7 @@ bool MNIndex::createTable()
 
 int MNIndex::insert(const int &pageNo, const int &idParent, const QString &title)
 {
-    QString sql="INSERT INTO "+tableName()+"("+pageNoName()+","+idParentName()+","+titleName()+") "+
+    QString sql="INSERT INTO "+tableName()+"("+pageIdName()+","+idParentName()+","+titleName()+") "+
             "VALUES("+QString::number(pageNo)+","+
             QString::number(idParent)+",:"+
             titleName()+");";

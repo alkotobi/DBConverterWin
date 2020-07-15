@@ -21,7 +21,7 @@ public:
     QSqlRecord record() const;
     void setRecord(const QSqlRecord &record);
     void createRecord();
-    QString pageNoName() const;
+    QString pageIdName() const;
     QString idParentName() const;
     QString titleName() const;
     bool createTable();
