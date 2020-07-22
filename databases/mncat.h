@@ -18,8 +18,9 @@ public:
     static QSqlRecord createRecord();
     static QMap<QString, QString> createFieldsMap();
     static bool importAllCat(QString bkListDbSourcePath);
-    static int getSourceCatId(const int &bkId);
+    static int getSourceCatId(const int &bkId, QString dbDEstPath);
     static bool createTable();
+    static int importCat(QString bkListDbSourcePath, QString dbDestPath, int catId);
 };
 
 #endif // MNCAT_H

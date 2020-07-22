@@ -64,7 +64,7 @@ int MNIndex::insert(const int &pageNo, const int &idParent, const QString &title
       if(query.exec()) return query.lastInsertId().toInt();else return 0;
 }
 
-bool MNIndex::importAllInd(QString bkDbSourcePath)
+bool MNIndex::importAllInd(QString bkDbSourcePath,int bookId)
 {
     QSqlQuery qrbkSource(QSqlDatabase::database(bkDbSourcePath));
     QString title;
@@ -72,7 +72,7 @@ bool MNIndex::importAllInd(QString bkDbSourcePath)
     if(QSqlDatabase::database(bkDbSourcePath).tables().contains("title")){
       sql="select * from title ORDER BY id,sub;";
     }else{
-      sql="select * from t"+QString::number(bkId)+" ORDER BY id,sub;";
+      sql="select * from t"+QString::number(bookId)+" ORDER BY id,sub;";
     }
     qrbkSource.exec(sql);
     QMap<int,int> lvls;
@@ -100,10 +100,10 @@ bool MNIndex::importAllInd(QString bkDbSourcePath)
     return  true;
 }
 
-MNIndex::MNIndex(const int &bkId)
+MNIndex::MNIndex(const int &bkId,QString path)
 {
     setTableName("I"+QString::number(bkId));
     createRecord();
-    dbPath=MNPathes::getDbBookPath(bkId);
+    dbPath=path;
     this->bkId=bkId;
 }

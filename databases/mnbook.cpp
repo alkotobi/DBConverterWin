@@ -40,12 +40,22 @@ void MNBook::setSqlPreperedInsert(const QString &sqlPreperedInsert)
     m_sqlPreperedInsert = sqlPreperedInsert;
 }
 
+QString MNBook::wordNormName(){
+    return "word_norm";
+}
+
+QString MNBook::wordTachkilName(){
+    return "tachkil";
+}
+
 void MNBook::createRecord()
 {
     QSqlRecord rcd;
     rcd.append(QSqlField("ID",QVariant::Int));
     rcd.append(QSqlField(wordName(),QVariant::String));
-    rcd.append(QSqlField(wordIdName(),QVariant::Int));
+    rcd.append(QSqlField(wordNormName(),QVariant::String));
+    rcd.append(QSqlField(wordTachkilName(),QVariant::String));
+    //rcd.append(QSqlField(wordIdName(),QVariant::Int));
    setRecord(rcd);
 }
 
@@ -65,11 +75,11 @@ bool MNBook::createTable()
     return MNQuery::createTable(dbPath(),record(),tableName());
 }
 
-int MNBook::insert(const QString &word, const int &wordID)
+int MNBook::insert(const QString &word,const QString &wordNorm,const QString &tachkil)
 {
     QString sql=sqlPreperedInsert();
     QList<QVariant> list;
-    list<<word<<wordID;
+    list<<word<<wordNorm<<tachkil;
     MN_WARNING(sql);
     return  MNQuery::execPreparedInsertSql(dbPath(),sql,list);
 }
@@ -86,14 +96,15 @@ void MNBook::getWordsList(const int &idFirst, const int &WordsCount,QStringList 
     MNQuery::getFirstFieldValuesListAsStrings(dbPath(),sql,valuesListAsStrings);
 }
 
-MNBook::MNBook(const int &bkId)
+MNBook::MNBook(const int &bkId,QString path)
 {
     setTableName("B"+QString::number(bkId));
     createRecord();
-    setDbPath(MNPathes::getDbBookPath(bkId));
-    setSqlPreperedInsert("INSERT INTO "+tableName()+"("+wordName()+","+wordIdName()+") "+
+    setDbPath(path);
+    setSqlPreperedInsert("INSERT INTO "+tableName()+"("+wordName()+","+wordNormName()+","+wordTachkilName()+") "+
                          "VALUES(:"+wordName()+",:"+
-                         wordIdName()+");"
+                         wordNormName()+",:"+
+                         wordTachkilName()+");"
                 );
 }
 

@@ -15,7 +15,7 @@ class MNIndex
     int bkId;
 public:
     QString dbPath;
-    MNIndex(const int &bkId);
+    MNIndex(const int &bkId, QString path);
     QString tableName() const;
     void setTableName(const QString &tableName);
     QSqlRecord record() const;
@@ -27,7 +27,7 @@ public:
     bool createTable();
     int insert(const int &pageNo, const int &idParent, const QString &title);
 
-    bool importAllInd(QString bkDbSourcePath);
+    bool importAllInd(QString bkDbSourcePath, int bookId);
 };
 
 #endif // MNINDEX_H

@@ -28,9 +28,11 @@ public:
     bool createTable();
     QString sqlPreperedInsert() const;
     void setSqlPreperedInsert(const QString &sqlPreperedInsert);
-    MNBook(const int &bkId);
-    int insert(const QString &word, const int &wordID);
+    MNBook(const int &bkId, QString path);
+    int insert(const QString &word, const QString &wordNorm, const QString &tachkil);
     void getWordsList(const int &idFirst, const int &WordsCount, QStringList *valuesListAsStrings);
+    QString wordTachkilName();
+    QString wordNormName();
 };
 
 #endif // MNBOOK_H

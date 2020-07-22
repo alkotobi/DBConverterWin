@@ -94,11 +94,11 @@ void MNPage::getPage(const int &pageNo, const int &tome,PageInfo *pgInfo)
 
 }
 
-MNPage::MNPage(const int &bkId)
+MNPage::MNPage(const int &bkId,QString path)
 {
     setTableName("P"+QString::number(bkId));
     createRecord();
-    setDbPath(MNPathes::getDbBookPath(bkId));
+    setDbPath(path);
 }
 
 

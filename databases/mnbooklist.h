@@ -20,7 +20,7 @@ public:
     static QString getTableName() ;
     static QMap<QString,QString> createFieldsMap();
     static int importBook(QString bkListDbSourcePath,QString bkListDbDestPath,int bkId);
-    static bool updateAuthorID(int bkID,int authID);
+    static bool updateAuthorID(int bkID, int authID, QString dbPath);
     static bool createTable();
 
 };

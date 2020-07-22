@@ -31,7 +31,21 @@ QMap<QString, QString> MNCat::createFieldsMap()
 }
 
 
-
+int MNCat::importCat(QString bkListDbSourcePath,QString dbDestPath,int catId)
+{
+    QSqlQuery qrbkListDbSource(QSqlDatabase::database(bkListDbSourcePath));
+    QSqlQuery qrbkListDbDest(QSqlDatabase::database(dbDestPath));
+    qrbkListDbSource.exec("select * from [0cat] where id="+QString::number(catId));
+    QString sql ="insert into "+TABLE_NAME+" (name,catID) VALUES (:name,:catID)";
+    while(qrbkListDbSource.next()){
+    qrbkListDbDest.prepare(sql);
+    qrbkListDbDest.bindValue(":name",qrbkListDbSource.record().field("name").value());
+    qrbkListDbDest.bindValue(":catID",qrbkListDbSource.record().field("id").value());
+    qrbkListDbDest.exec();
+    return qrbkListDbDest.lastInsertId().toInt();
+ }
+    return  0;
+}
 
 
 bool MNCat::importAllCat(QString bkListDbSourcePath)
@@ -61,16 +75,12 @@ bool MNCat::importAllCat(QString bkListDbSourcePath)
     return  true;
 }
 
-int MNCat::getSourceCatId(const int &bkId)
+int MNCat::getSourceCatId(const int &bkId,QString sourceBksListDbPath)
 {
-     QSqlQuery qrbkListDbDest(QSqlDatabase::database(MNPathes::getdbBooksListPath()));
-     qrbkListDbDest.exec("select catId from booksList where id="+QString::number(bkId));
+     QSqlQuery qrbkListDbDest(QSqlDatabase::database(sourceBksListDbPath));
+     qrbkListDbDest.exec("select cat from [0bok] where bkid="+QString::number(bkId));
      if(qrbkListDbDest.first()){
-             QString id= qrbkListDbDest.record().field(0).value().toString();
-             qrbkListDbDest.exec("select ID from cat where catid="+id);
-             if (qrbkListDbDest.first()){
-                 return qrbkListDbDest.record().field(0).value().toInt();
-             }
+         return   qrbkListDbDest.record().field(0).value().toInt();
 
      }
      return 0;

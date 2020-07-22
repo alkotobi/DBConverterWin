@@ -51,12 +51,14 @@ void MainWindow::on_bkImport_clicked()
 #endif
  int book_id_source=21710;
  QString bkDbDestPath;
- QString bkListDbDestPath=MNPathes::getdbBooksListPath();
+ QString p= ui->txt_export_location->text();
+ if(p=="") return;//TOEDO:show error message box
+ if(p[p.length()-1]!='\\'){
+         p=p+"\\";
+}
+ QString bkListDbDestPath=p+QString::number(book_id_source)+".sqlite";
  QString bkDbSourcePath ;
  QString bkListDbSourcePath=ui->txtShamelaPath->text();
-
-
-
 
  if (! MNDb::openSqliteDb(bkListDbDestPath)){
      MN_ERROR("cant open sqlite database");
@@ -64,6 +66,15 @@ void MainWindow::on_bkImport_clicked()
  if(! MNDb::openMsAccessDb(bkListDbSourcePath)){
      MN_ERROR("cant open main.mdb");
  }
+
+
+ MNQuery::createTable(bkListDbDestPath,MNBookList::createRecord(),MNBookList::TABLE_NAME);
+ MNQuery::createTable(bkListDbDestPath,MNAuthor::createRecord(),MNAuthor::TABLE_NAME);
+ MNQuery::createTable(bkListDbDestPath,MNCat::createRecord(),MNCat::TABLE_NAME);
+ MNMidleTableLink(bkListDbDestPath,MNBookList::TABLE_NAME,MNAuthor::TABLE_NAME).createTable();
+ MNMidleTableLink(bkListDbDestPath,MNCat::TABLE_NAME,MNCat::TABLE_NAME).createTable();
+ MNMidleTableLink(bkListDbDestPath,MNBookList::TABLE_NAME,MNCat::TABLE_NAME).createTable();
+
 
  //get the book database link
  bkDbSourcePath=MNBookList::getBkDbSourcePath(bkListDbSourcePath,book_id_source);
@@ -86,29 +97,21 @@ void MainWindow::on_bkImport_clicked()
  }
   int authid=MNAuthor::importAuthor(bkListDbSourcePath,bkListDbDestPath,book_id_source);
   int book_id=MNBookList::importBook( bkListDbSourcePath, bkListDbDestPath, book_id_source );
-  MNBookList::updateAuthorID( book_id,  authid);
+  MNBookList::updateAuthorID( book_id,  authid,bkListDbDestPath);
   MNMidleTableLink(bkListDbDestPath,MNBookList::TABLE_NAME,MNAuthor::TABLE_NAME).linkLeftToRight(book_id,authid);
-  //MNCat::importAllCat(bkListDbSourcePath);
-  int catId=MNCat::getSourceCatId(book_id);
+  int catSourceId=MNCat::getSourceCatId(book_id,bkListDbSourcePath);
+  int catId=MNCat::importCat(bkListDbSourcePath,bkListDbDestPath,catSourceId);
   MNMidleTableLink(bkListDbDestPath,MNBookList::TABLE_NAME,MNCat::TABLE_NAME).linkLeftToRight(book_id,catId);
 
-  //import text
-  QString dbSearchPath=MNPathes::getdbSearchPath();
-  MNDb::openSqliteDb(dbSearchPath);
-  MNDb::openSqliteDb(MNPathes::getDbBookPath(book_id));
-  MNDb::makeSQliteDbFaster(dbSearchPath);
-  MNDb::makeSQliteDbFaster(MNPathes::getDbBookPath(book_id));
-  MNDb::startTransaction(dbSearchPath);
-  MNDb::startTransaction(MNPathes::getDbBookPath(book_id));
-  MNBook book(book_id);
+  MNDb::makeSQliteDbFaster(bkListDbDestPath);
+  MNDb::startTransaction(bkListDbDestPath);
+  MNBook book(book_id,bkListDbDestPath);
   book.createTable();
-  MNPage pages(book_id);
+  MNPage pages(book_id,bkListDbDestPath);
   pages.createTable();
-  MNSearchBook bksearch(book_id);
-  bksearch.createTable();
-  MNIndex index(book_id);
+  MNIndex index(book_id,bkListDbDestPath);
   index.createTable();
-  index.importAllInd(bkDbSourcePath);
+  index.importAllInd(bkDbSourcePath,book_id_source);
 
   //check if table is from archive or not
   QSqlQuery bksource(QSqlDatabase::database(bkDbSourcePath));
@@ -125,36 +128,21 @@ void MainWindow::on_bkImport_clicked()
       QList<MNNass::Kalimat>* kalimat = MNNass::getKalimat(nass);
       QList<int> bkIds;
       foreach(MNNass::Kalimat kalima,*kalimat){
-          int idKalima=MNWords::insert(kalima.norm);
-          int idTachkil=MNTachkil::insert(kalima.tachkil);
-          MNMidleTableLink(MNPathes::getdbSearchPath(),
-                           MNWords::TABLE_NAME,MNTachkil::TABLE_NAME).
-                  linkLeftToRight(idKalima,idTachkil);
-          int idbook = book.insert(kalima.original,idKalima);
+          int idbook = book.insert(kalima.original,kalima.norm,kalima.tachkil);
           bkIds<<idbook;
-          bksearch.linkBookToWord(idbook,idKalima);
       }
       int pageNo=bksource.record().field("page").value().toInt();
       int tome=bksource.record().field("part").value().toInt();
       pages.insert(pageNo,tome,bkIds.at(0),bkIds.count());
       delete kalimat;
   }
-  MNDb::commitTransaction(dbSearchPath);
-  MNDb::commitTransaction(MNPathes::getDbBookPath(book_id));
+  MNDb::commitTransaction(bkListDbDestPath);
   Log::showInfo("book imported");
-
-
-
-
-
 
  //close dbs
  MNDb::closeDb(bkListDbDestPath);
  MNDb::closeDb(bkListDbSourcePath);
  MNDb::closeDb(bkDbSourcePath);
- MNDb::closeDb(dbSearchPath);
- MNDb::closeDb(MNPathes::getDbBookPath(book_id));
-
 
 }
 
@@ -163,6 +151,7 @@ void MainWindow::on_importCats_clicked()
 #ifndef Q_OS_WIN
     return;
 #endif
+
     QString bkListDbSourcePath=ui->txtShamelaPath->text();//main.mdb
     MNDb::openMsAccessDb(bkListDbSourcePath);
     MNDb::openSqliteDb(MNPathes::getdbBooksListPath());

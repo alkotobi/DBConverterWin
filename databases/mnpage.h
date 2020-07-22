@@ -18,7 +18,7 @@ public:
     typedef struct {
        int ID,pageNo,tomeNo,startFrom,wordsCount;
     }PageInfo;
-    MNPage(const int &bkId);
+    MNPage(const int &bkId, QString path);
     QString tableName() const;
     void setTableName(const QString &tableName);
     QString dbPath() const;
