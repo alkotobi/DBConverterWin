@@ -49,7 +49,7 @@ void MainWindow::on_bkImport_clicked()
 #ifndef Q_OS_WIN
     return;
 #endif
- int book_id_source=21710;
+ int book_id_source=34271;
  QString bkDbDestPath;
  QString p= ui->txt_export_location->text();
  if(p=="") return;//TOEDO:show error message box

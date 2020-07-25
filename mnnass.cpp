@@ -35,7 +35,7 @@ QList<MNNass::Kalimat>* MNNass::getKalimat(const QString &nass)
             original= original+chr;
             continue;
         }else if(chr.isSpace()){
-            while (nass[i].isSpace() && i<nass_length) {
+            while (i<nass_length  && nass[i].isSpace()) {
                 original= original+chr;
                 i++; // must reduce 1 after out this
             } ;
